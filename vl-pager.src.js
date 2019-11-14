@@ -20,6 +20,14 @@ export class VlPager extends VlElement(HTMLElement) {
     return ['total-items', 'current-page', 'items-per-page']
   }
 
+  static get _observedChildClassAttributes() {
+    return ['align-center','align-right'];
+  }
+
+  get _classPrefix() {
+    return 'vl-pager--';
+  }
+
   static get properties() {
     return {
       totalItems: {attribute: true},
@@ -42,16 +50,15 @@ export class VlPager extends VlElement(HTMLElement) {
                   Vorige<span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 </a>
               </li>
-    <pages-links></pages-links>
-    <li class="vl-pager__element">
-      <a id="pageForwardLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
-        <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
-        <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
-</div>
-          `);
+              <pages-links></pages-links>
+              <li class="vl-pager__element">
+                <a id="pageForwardLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
+                <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
+                <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+           </div>`);
   }
 
   connectedCallback() {

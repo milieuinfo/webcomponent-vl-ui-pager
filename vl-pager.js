@@ -1,4 +1,4 @@
-import{VlElement,define}from"/node_modules/vl-ui-core/vl-core.js";import{html,render}from"/node_modules/lite-html/lite-html.js";export class VlPager extends VlElement(HTMLElement){static get _observedAttributes(){return["total-items","current-page","items-per-page"]}static get properties(){return{totalItems:{attribute:true}}}constructor(){super(`<style>
+import{VlElement,define}from"/node_modules/vl-ui-core/vl-core.js";import{html,render}from"/node_modules/lite-html/lite-html.js";export class VlPager extends VlElement(HTMLElement){static get _observedAttributes(){return["total-items","current-page","items-per-page"]}static get _observedChildClassAttributes(){return["align-center","align-right"]}get _classPrefix(){return"vl-pager--"}static get properties(){return{totalItems:{attribute:true}}}constructor(){super(`<style>
             @import "/node_modules/vl-ui-pager/style.css";
            </style>
            <div class="vl-pager">
@@ -13,16 +13,15 @@ import{VlElement,define}from"/node_modules/vl-ui-core/vl-core.js";import{html,re
                   Vorige<span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 </a>
               </li>
-    <pages-links></pages-links>
-    <li class="vl-pager__element">
-      <a id="pageForwardLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
-        <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
-        <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
-</div>
-          `)}connectedCallback(){this.shadowRoot.querySelector("#pageBackLink").addEventListener("click",()=>{if(!(this.currentPage-1<=0)){this.setAttribute("current-page",this.currentPage-1)}});this.shadowRoot.querySelector("#pageForwardLink").addEventListener("click",()=>{if(!(this.currentPage+1>this.lastPage)){this.setAttribute("current-page",this.currentPage+1)}})}attributeChangedCallback(name,oldValue,newValue){super.attributeChangedCallback(name,oldValue,newValue);this._updateDom();this._updatePagination()}_current_pageChangedCallback(oldValue,newValue){this.dispatchEvent(new CustomEvent("changed",{detail:{oldValue:oldValue,newValue:newValue}}))}_updateDom(){this._updateItemsInfo()}_updateItemsInfo(){this.shadowRoot.querySelector("#itemsOfCurrentPageInfo").innerHTML=`${this.firstItemNrOfPage}-${this.lastItemNrOfPage}`;this.shadowRoot.querySelector("#totalItems").innerHTML=this.totalItems;this.shadowRoot.querySelectorAll('[name="itemsPerPage"]').forEach(span=>{span.innerHTML=`${this.itemsPerPage} rijen`})}_updatePagination(){render(this._renderPageLinks(),this.shadowRoot.querySelector("pages-links"))}_renderPageLinks(){let pages=this._calculatePagination(this.currentPage,this.lastPage);return html`${pages.map(pageNr=>this._renderPageLink(pageNr))}`}_renderPageLink(number){if(number===this.currentPage){return html`<li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
+              <pages-links></pages-links>
+              <li class="vl-pager__element">
+                <a id="pageForwardLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
+                <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
+                <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+           </div>`)}connectedCallback(){this.shadowRoot.querySelector("#pageBackLink").addEventListener("click",()=>{if(!(this.currentPage-1<=0)){this.setAttribute("current-page",this.currentPage-1)}});this.shadowRoot.querySelector("#pageForwardLink").addEventListener("click",()=>{if(!(this.currentPage+1>this.lastPage)){this.setAttribute("current-page",this.currentPage+1)}})}attributeChangedCallback(name,oldValue,newValue){super.attributeChangedCallback(name,oldValue,newValue);this._updateDom();this._updatePagination()}_current_pageChangedCallback(oldValue,newValue){this.dispatchEvent(new CustomEvent("changed",{detail:{oldValue:oldValue,newValue:newValue}}))}_updateDom(){this._updateItemsInfo()}_updateItemsInfo(){this.shadowRoot.querySelector("#itemsOfCurrentPageInfo").innerHTML=`${this.firstItemNrOfPage}-${this.lastItemNrOfPage}`;this.shadowRoot.querySelector("#totalItems").innerHTML=this.totalItems;this.shadowRoot.querySelectorAll('[name="itemsPerPage"]').forEach(span=>{span.innerHTML=`${this.itemsPerPage} rijen`})}_updatePagination(){render(this._renderPageLinks(),this.shadowRoot.querySelector("pages-links"))}_renderPageLinks(){let pages=this._calculatePagination(this.currentPage,this.lastPage);return html`${pages.map(pageNr=>this._renderPageLink(pageNr))}`}_renderPageLink(number){if(number===this.currentPage){return html`<li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
                   <a>${number}</a>
                 </li>`}else if(number==="cta"){return html`<li class="vl-pager__element"> 
                     <div class="vl-pager__element__cta">
