@@ -53,14 +53,14 @@ export class VlPager extends VlElement(HTMLElement) {
                 <strong id="itemsOfCurrentPageInfo"></strong> van <span id="totalItems"></span>
               </li>
               <li class="vl-pager__element">
-                <a id="pageBackLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">
+                <a id="pageBackLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
                 <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
                   Vorige<span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 </a>
               </li>
               <pages-links></pages-links>
               <li class="vl-pager__element">
-                <a id="pageForwardLink" href="#" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
+                <a id="pageForwardLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
                 <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
                 </a>
@@ -128,7 +128,7 @@ export class VlPager extends VlElement(HTMLElement) {
                   </li>`;
     } else {
       return html`<li @click=${() => {this.setAttribute('current-page',number)}} name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-                  <a href="#" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
+                  <a href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
                 </li>`;
     }
   }
