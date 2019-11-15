@@ -4,11 +4,19 @@ import {html, render} from '/node_modules/lite-html/lite-html.js';
 /**
  * VlPager
  * @class
- * @classdesc
+ * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven,
+ * markeer de huidige pagina en voeg navigatie knoppen toe.
  *
  * @extends VlElement
  *
- * @property
+ * @property {number} total-items - Attribuut wordt gebruikt om totaal rijen te bepalen.
+ * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
+ * @property {number} items-per-page - Attribuut wordt gebruikt omm het aantal rijen per pagina te bepalen.
+ *
+ * @property {boolean} align-center
+ * @property {boolean} align-right
+ *
+ * @event changed
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
@@ -78,17 +86,13 @@ export class VlPager extends VlElement(HTMLElement) {
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
-    this._updateDom();
+    this._updateItemsInfo();
     this._updatePagination();
   }
 
   _current_pageChangedCallback(oldValue, newValue) {
     this.dispatchEvent(new CustomEvent('changed',
         {detail: {oldValue: oldValue, newValue: newValue}}));
-  }
-
-  _updateDom() {
-    this._updateItemsInfo();
   }
 
   _updateItemsInfo() {
@@ -129,32 +133,61 @@ export class VlPager extends VlElement(HTMLElement) {
     }
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get totalPages() {
     return this.totalItems / this.itemsPerPage + ((this.totalItems
         % this.itemsPerPage) > 0 ? 1 : 0);
   }
 
+  /**
+   *
+   * @return {number}
+   */
+
   get totalItems() {
     return parseInt(this.getAttribute('total-items'));
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get currentPage() {
     return parseInt(this.getAttribute('current-page'));
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get itemsPerPage() {
     return parseInt(this.getAttribute('items-per-page'));
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get firstItemNrOfPage() {
     return (this.currentPage - 1) * this.itemsPerPage + 1
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get lastItemNrOfPage() {
     let lastItemNr = this.firstItemNrOfPage + this.itemsPerPage - 1;
     return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
   }
 
+  /**
+   *
+   * @return {number}
+   */
   get lastPage() {
     return this.totalItems / this.itemsPerPage + (this.totalItems
     % this.itemsPerPage > 1 ? 1 : 0);
