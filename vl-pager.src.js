@@ -29,7 +29,7 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   static get _observedChildClassAttributes() {
-    return ['align-center','align-right'];
+    return ['align-center', 'align-right'];
   }
 
   get _classPrefix() {
@@ -70,18 +70,22 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector("#pageBackLink").addEventListener("click",
-        () => {
-          if (!(this.currentPage - 1 <= 0)) {
-            this.setAttribute("current-page", this.currentPage - 1);
-          }
-        });
-    this.shadowRoot.querySelector("#pageForwardLink").addEventListener("click",
-        () => {
-          if (!(this.currentPage + 1 > this.lastPage)) {
-            this.setAttribute("current-page", this.currentPage + 1);
-          }
-        });
+    if (!this._dressed) {
+      this.shadowRoot.querySelector("#pageBackLink").addEventListener("click",
+          () => {
+            if (!(this.currentPage - 1 <= 0)) {
+              this.setAttribute("current-page", this.currentPage - 1);
+            }
+          });
+      this.shadowRoot.querySelector("#pageForwardLink").addEventListener(
+          "click",
+          () => {
+            if (!(this.currentPage + 1 > this.lastPage)) {
+              this.setAttribute("current-page", this.currentPage + 1);
+            }
+          });
+      this._dressed = true;
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -127,7 +131,9 @@ export class VlPager extends VlElement(HTMLElement) {
                     </div>
                   </li>`;
     } else {
-      return html`<li @click=${() => {this.setAttribute('current-page',number)}} name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
+      return html`<li @click=${() => {
+        this.setAttribute('current-page', number)
+      }} name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
                   <a href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
                 </li>`;
     }
