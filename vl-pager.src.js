@@ -11,12 +11,12 @@ import {html, render} from '/node_modules/lite-html/lite-html.js';
  *
  * @property {number} total-items - Attribuut wordt gebruikt om totaal rijen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
- * @property {number} items-per-page - Attribuut wordt gebruikt omm het aantal rijen per pagina te bepalen.
+ * @property {number} items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
  *
  * @property {boolean} align-center
  * @property {boolean} align-right
  *
- * @event changed
+ * @event pagechanged
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
@@ -34,12 +34,6 @@ export class VlPager extends VlElement(HTMLElement) {
 
   get _classPrefix() {
     return 'vl-pager--';
-  }
-
-  static get properties() {
-    return {
-      totalItems: {attribute: true},
-    }
   }
 
   constructor() {
@@ -94,9 +88,16 @@ export class VlPager extends VlElement(HTMLElement) {
     this._updatePagination();
   }
 
+  _items_per_pageChangedCallback(oldValue,newValue){};
+
+  _total_itemsChangedCallback(oldValue,newValue){};
+
+  _items_per_pageChangeCallback(oldValue,newValue){};
+
+
   _current_pageChangedCallback(oldValue, newValue) {
-    this.dispatchEvent(new CustomEvent('changed',
-        {detail: {oldValue: oldValue, newValue: newValue}}));
+    this.dispatchEvent(new CustomEvent('pagechanged',
+        {detail: {oldPage: oldValue, newPage: newValue}}));
   }
 
   _updateItemsInfo() {
@@ -115,16 +116,16 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _renderPageLinks() {
-    let pages = this._calculatePagination(this.currentPage, this.lastPage);
+    const pages = this._calculatePagination(this.currentPage, this.lastPage);
     return html`${pages.map((pageNr) => this._renderPageLink(pageNr))}`;
   }
 
   _renderPageLink(number) {
     if (number === this.currentPage) {
       return html`<li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-                  <a>${number}</a>
+                  <label>${number}</label>
                 </li>`;
-    } else if (number === "cta") {
+    } else if (number === "skipped") {
       return html`<li class="vl-pager__element"> 
                     <div class="vl-pager__element__cta">
                       ...
@@ -144,8 +145,7 @@ export class VlPager extends VlElement(HTMLElement) {
    * @return {number}
    */
   get totalPages() {
-    return this.totalItems / this.itemsPerPage + ((this.totalItems
-        % this.itemsPerPage) > 0 ? 1 : 0);
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
   /**
@@ -186,7 +186,7 @@ export class VlPager extends VlElement(HTMLElement) {
    * @return {number}
    */
   get lastItemNrOfPage() {
-    let lastItemNr = this.firstItemNrOfPage + this.itemsPerPage - 1;
+    const lastItemNr = this.firstItemNrOfPage + this.itemsPerPage - 1;
     return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
   }
 
@@ -221,7 +221,7 @@ export class VlPager extends VlElement(HTMLElement) {
         if (i - l === 2) {
           rangeWithDots.push(l + 1);
         } else if (i - l !== 1) {
-          rangeWithDots.push('cta');
+          rangeWithDots.push('skipped');
         }
       }
       rangeWithDots.push(i);

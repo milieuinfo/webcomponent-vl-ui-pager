@@ -10,58 +10,88 @@
 </head>
 
 <body>
-  <test-fixture id="vl-pager-fixture">
-    <template>
-      <vl-pager total-items="100" items-per-page="10" current-page="1"></vl-pager>
-    </template>
-  </test-fixture>
+<test-fixture id="vl-pager-fixture">
+  <template>
+    <vl-pager total-items="100" items-per-page="10" current-page="1"></vl-pager>
+  </template>
+</test-fixture>
 
-  <script>
-    suite('vl-pager', () => {
-      const should = chai.should();
+<script>
+  suite('vl-pager', () => {
+    const should = chai.should();
 
-      setup((done) => {
-        customElements.whenDefined('vl-pager').then(done);
+    setup((done) => {
+      customElements.whenDefined('vl-pager').then(done);
+    });
+
+    test('bevat een container met de juiste class zodat de stijl goed toegepast wordt', () => {
+      const pager = fixture('vl-pager-fixture');
+      assert.isTrue(pager._element.classList.contains("vl-pager"));
+    });
+
+    test('de component bevat de juiste data', () => {
+      const pager = fixture('vl-pager-fixture');
+      assert.equal(pager.totalPages, 10);
+      assert.equal(pager.totalItems, 100);
+      assert.equal(pager.currentPage, 1);
+      assert.equal(pager.itemsPerPage, 10);
+      assert.equal(pager.firstItemNrOfPage, 1);
+      assert.equal(pager.lastItemNrOfPage, 10);
+      assert.equal(pager.lastPage, 10);
+    });
+
+    test('gebruik "current-page" attribuut om te bladeren', () => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page", 2);
+      flush(() => {
+        assert.equal(pager.totalPages, 10);
+        assert.equal(pager.totalItems, 100);
+        assert.equal(pager.currentPage, 2);
+        assert.equal(pager.itemsPerPage, 10);
+        assert.equal(pager.firstItemNrOfPage, 11);
+        assert.equal(pager.lastItemNrOfPage, 20);
+        assert.equal(pager.lastPage, 10);
       });
+    });
 
-      test('bevat een container met de juiste class zodat de stijl goed toegepast wordt', () => {
-        const pager = fixture('vl-pager-fixture');
-        assert.isTrue(pager._element.classList.contains("vl-pager"));
+    test('deling met de rest', () => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page", 2);
+      pager.setAttribute("totalItems", 199);
+      pager.setAttribute("itemsPerPage", 99);
+      flush(() => {
+        assert.equal(pager.totalPages, 3);
+        assert.equal(pager.totalItems, 199);
+        assert.equal(pager.currentPage, 2);
+        assert.equal(pager.itemsPerPage, 99);
+        assert.equal(pager.firstItemNrOfPage, 100);
+        assert.equal(pager.lastItemNrOfPage, 198);
+        assert.equal(pager.lastPage, 3);
       });
+    });
 
-      test('de component bevat de juiste data', () => {
-        const pager = fixture('vl-pager-fixture');
-        assert.equal(pager.totalPages,10);
-        assert.equal(pager.totalItems,100);
-        assert.equal(pager.currentPage,1);
-        assert.equal(pager.itemsPerPage,10);
-        assert.equal(pager.firstItemNrOfPage,1);
-        assert.equal(pager.lastItemNrOfPage,10);
-        assert.equal(pager.lastPage,10);
+    test('forward-button verandert de "current-page" attribuut en triggert "changed" event', (done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.addEventListener('changed', () => {
+        assert.equal(pager.currentPage, 2);
+        done();
       });
+      pager.shadowRoot.querySelector("#pageForwardLink").click();
+    });
 
-      test('kunnen de pagina veranderen door de "current-page" attribuut', () => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page",2);
-        assert.equal(pager.totalPages,10);
-        assert.equal(pager.totalItems,100);
-        assert.equal(pager.currentPage,2);
-        assert.equal(pager.itemsPerPage,10);
-        assert.equal(pager.firstItemNrOfPage,11);
-        assert.equal(pager.lastItemNrOfPage,20);
-        assert.equal(pager.lastPage,10);
+    test('backward-button verandert de "current-page" attribuut en triggert "changed" event', (done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.addEventListener('changed', () => {
+        assert.equal(pager.currentPage, 1);
+        done();
       });
-
-      test('navigatie buttons verandert de "current-page" attribuut en triggert "changed" event', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.addEventListener('changed',()=> {
-          assert.equal(pager.currentPage,2);
-          done();
-        });
+      pager.setAttribute("current-page", 2);
+      flush(() => {
         pager.shadowRoot.querySelector("#pageForwardLink").click();
       });
     });
-  </script>
+  });
+</script>
 </body>
 
 </html>
