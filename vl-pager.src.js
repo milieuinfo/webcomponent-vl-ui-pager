@@ -74,7 +74,7 @@ export class VlPager extends VlElement(HTMLElement) {
       this.shadowRoot.querySelector("#pageForwardLink").addEventListener(
           "click",
           () => {
-            if (!(this.currentPage + 1 > this.lastPage)) {
+            if (!(this.currentPage + 1 > this.totalPages)) {
               this.setAttribute("current-page", this.currentPage + 1);
             }
           });
@@ -116,7 +116,7 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _renderPageLinks() {
-    const pages = this._calculatePagination(this.currentPage, this.lastPage);
+    const pages = this._calculatePagination(this.currentPage, this.totalPages);
     return html`${pages.map((pageNr) => this._renderPageLink(pageNr))}`;
   }
 
@@ -188,15 +188,6 @@ export class VlPager extends VlElement(HTMLElement) {
   get lastItemNrOfPage() {
     const lastItemNr = this.firstItemNrOfPage + this.itemsPerPage - 1;
     return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get lastPage() {
-    return this.totalItems / this.itemsPerPage + (this.totalItems
-    % this.itemsPerPage > 1 ? 1 : 0);
   }
 
   //https://gist.github.com/kottenator/9d936eb3e4e3c3e02598 TODO:vervangen door een dependency?

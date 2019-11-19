@@ -28,8 +28,8 @@
     <code class="line-numbers language-markup">
       &lt;vl-pager id="demoPager" total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
       &lt;script&gt;
-      document.querySelector('#dem-pager').addEventListener('changed', (e) =&gt; {
-        console.log("changed", e)
+      document.querySelector('#dem-pager').addEventListener('pagechanged', (e) =&gt; {
+        console.log("pagechanged", e)
       });
       &lt;/script&gt;
     </code>
@@ -38,8 +38,8 @@
     <vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
   </div>
   <script>
-    document.querySelector('#demoPager').addEventListener('changed', (e) => {
-      console.log("changed", e);
+    document.querySelector('#demoPager').addEventListener('pagechanged', (e) => {
+      console.log("pagechanged", e);
     });
   </script>
 </div>
