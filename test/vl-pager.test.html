@@ -52,18 +52,19 @@
       });
     });
 
-    test('deling met de rest', () => {
+    test('deling met de rest', (done) => {
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", 2);
-      pager.setAttribute("totalItems", 199);
-      pager.setAttribute("itemsPerPage", 99);
+      pager.setAttribute("total-items", 199);
+      pager.setAttribute("items-per-page", 99);
       flush(() => {
+        assert.equal(pager.currentPage, 2);
         assert.equal(pager.totalPages, 3);
         assert.equal(pager.totalItems, 199);
-        assert.equal(pager.currentPage, 2);
         assert.equal(pager.itemsPerPage, 99);
         assert.equal(pager.firstItemNrOfPage, 100);
         assert.equal(pager.lastItemNrOfPage, 198);
+        done();
       });
     });
 
@@ -78,12 +79,12 @@
 
     test('backward-button verandert de "current-page" attribuut en triggert "changed" event', (done) => {
       const pager = fixture('vl-pager-fixture');
-      pager.addEventListener('pagechanged', () => {
-        assert.equal(pager.currentPage, 1);
-        done();
-      });
       pager.setAttribute("current-page", 2);
       flush(() => {
+        pager.addEventListener('pagechanged', () => {
+          assert.equal(pager.currentPage, 1);
+          done();
+        });
         pager.shadowRoot.querySelector("#pageBackLink").click();
       });
     });

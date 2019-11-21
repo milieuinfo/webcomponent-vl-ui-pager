@@ -16,7 +16,7 @@ import {html, render} from '/node_modules/lite-html/lite-html.js';
  * @property {boolean} align-center
  * @property {boolean} align-right
  *
- * @event pagechanged
+ * @event pagechanged - Als de huidge pagina nummer verandert.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
@@ -97,7 +97,7 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _current_pageChangedCallback(oldValue, newValue) {
     this.dispatchEvent(new CustomEvent('pagechanged',
-        {detail: {oldPage: oldValue, newPage: newValue}}));
+        {detail: {oldPage: oldValue, newPage: newValue},bubbles: true}));
   }
 
   _updateItemsInfo() {
