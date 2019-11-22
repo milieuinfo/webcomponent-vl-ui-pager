@@ -102,7 +102,7 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _updateItemsInfo() {
     this.shadowRoot.querySelector(
-        '#itemsOfCurrentPageInfo').innerHTML = `${this.firstItemNrOfPage}-${this.lastItemNrOfPage}`;
+        '#itemsOfCurrentPageInfo').innerHTML = `${this._firstItemNrOfPage}-${this._lastItemNrOfPage}`;
     this.shadowRoot.querySelector('#totalItems').innerHTML = this.totalItems;
     this.shadowRoot.querySelectorAll('[name="itemsPerPage"]').forEach(
         (span) => {
@@ -177,7 +177,7 @@ export class VlPager extends VlElement(HTMLElement) {
    *
    * @return {number}
    */
-  get firstItemNrOfPage() {
+  get _firstItemNrOfPage() {
     return (this.currentPage - 1) * this.itemsPerPage + 1
   }
 
@@ -185,8 +185,8 @@ export class VlPager extends VlElement(HTMLElement) {
    *
    * @return {number}
    */
-  get lastItemNrOfPage() {
-    const lastItemNr = this.firstItemNrOfPage + this.itemsPerPage - 1;
+  get _lastItemNrOfPage() {
+    const lastItemNr = this._firstItemNrOfPage + this.itemsPerPage - 1;
     return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
   }
 

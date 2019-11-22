@@ -35,8 +35,8 @@
       assert.equal(pager.totalItems, 100);
       assert.equal(pager.currentPage, 1);
       assert.equal(pager.itemsPerPage, 10);
-      assert.equal(pager.firstItemNrOfPage, 1);
-      assert.equal(pager.lastItemNrOfPage, 10);
+      assert.equal(pager._firstItemNrOfPage, 1);
+      assert.equal(pager._lastItemNrOfPage, 10);
     });
 
     test('gebruik "current-page" attribuut om te bladeren', () => {
@@ -47,8 +47,8 @@
         assert.equal(pager.totalItems, 100);
         assert.equal(pager.currentPage, 2);
         assert.equal(pager.itemsPerPage, 10);
-        assert.equal(pager.firstItemNrOfPage, 11);
-        assert.equal(pager.lastItemNrOfPage, 20);
+        assert.equal(pager._firstItemNrOfPage, 11);
+        assert.equal(pager._lastItemNrOfPage, 20);
       });
     });
 
@@ -62,8 +62,8 @@
         assert.equal(pager.totalPages, 3);
         assert.equal(pager.totalItems, 199);
         assert.equal(pager.itemsPerPage, 99);
-        assert.equal(pager.firstItemNrOfPage, 100);
-        assert.equal(pager.lastItemNrOfPage, 198);
+        assert.equal(pager._firstItemNrOfPage, 100);
+        assert.equal(pager._lastItemNrOfPage, 198);
         done();
       });
     });
