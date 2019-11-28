@@ -1,6 +1,6 @@
 {
   "name": "vl-ui-pager",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "vl-ui-pager",
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
