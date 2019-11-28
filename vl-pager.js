@@ -1,5 +1,5 @@
 import{VlElement,define}from"/node_modules/vl-ui-core/vl-core.js";import{html,render}from"/node_modules/lite-html/lite-html.js";export class VlPager extends VlElement(HTMLElement){static get _observedAttributes(){return["total-items","current-page","items-per-page"]}static get _observedChildClassAttributes(){return["align-center","align-right"]}get _classPrefix(){return"vl-pager--"}constructor(){super(`<style>
-            @import "../style.css";
+            @import "/node_modules/vl-ui-pager/style.css";
            </style>
            <div class="vl-pager">
             <ul class="vl-pager__list">
