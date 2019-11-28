@@ -2,8 +2,8 @@
 version: 2
 plan:
   project-key: WEBCO
-  key: VLPAGER
-  name: webcomponent-vl-pager
+  key: VLUIPAGER
+  name: webcomponent-vl-ui-pager
 
 triggers:
   - polling: 130
@@ -48,7 +48,7 @@ Release:
 ---
 version: 2
 plan:
-  key: VLPAGER
+  key: VLUIPAGER
 
 plan-permissions:
   - groups:

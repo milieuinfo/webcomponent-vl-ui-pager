@@ -1,5 +1,5 @@
 {
-  "name": "vl-pager",
+  "name": "vl-ui-pager",
   "version": "0.0.0",
   "description": "vl-ui-pager",
   "scripts": {
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/milieuinfo/webcomponent-vl-pager.git"
+    "url": "git+https://github.com/milieuinfo/webcomponent-vl-ui-pager.git"
   },
   "author": "DIDM",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/milieuinfo/webcomponent-vl-pager/issues"
+    "url": "https://github.com/milieuinfo/webcomponent-vl-ui-pager/issues"
   },
-  "homepage": "https://github.com/milieuinfo/webcomponent-vl-pager#readme",
+  "homepage": "https://github.com/milieuinfo/webcomponent-vl-ui-pager#readme",
   "publishConfig": {
     "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
   },
