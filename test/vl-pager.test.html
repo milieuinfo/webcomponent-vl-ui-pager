@@ -88,6 +88,35 @@
         pager.shadowRoot.querySelector("#pageBackLink").click();
       });
     });
+
+    test('de pager is onzichtbare als de attribute totaal-items gelijk aan 0',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("total-items",0);
+      flush(() => {
+        assert.equal(pager.style.display,"none");
+        done();
+      })
+    });
+
+    test('de backward-button is onzichtbare als de attribute current-page gelijk aan 1',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page",1);
+      flush(() => {
+        assert.equal(pager._pageBackListItem.style.display,"none");
+        assert.notEqual(pager._pageForwardListItem.style.display,"none");
+        done();
+      })
+    });
+
+    test('de forward-button is onzichtbare als de pager al op de laatste pagina zet',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page",10);
+      flush(() => {
+        assert.notEqual(pager._pageBackListItem.style.display,"none");
+        assert.equal(pager._pageForwardListItem.style.display,"none");
+        done();
+      })
+    })
   });
 </script>
 </body>

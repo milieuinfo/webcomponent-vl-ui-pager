@@ -46,14 +46,14 @@ export class VlPager extends VlElement(HTMLElement) {
                 <span class="vl-u-visually-hidden">Rij</span>
                 <strong id="itemsOfCurrentPageInfo"></strong> van <span id="totalItems"></span>
               </li>
-              <li class="vl-pager__element">
+              <li id="pageBackListItem" class="vl-pager__element">
                 <a id="pageBackLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
                 <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
                   Vorige<span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 </a>
               </li>
               <pages-links></pages-links>
-              <li class="vl-pager__element">
+              <li id="pageForwardListItem" class="vl-pager__element">
                 <a id="pageForwardLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">Volgende
                 <span name="itemsPerPage" class="vl-u-visually-hidden"></span>
                 <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
@@ -84,20 +84,34 @@ export class VlPager extends VlElement(HTMLElement) {
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
+    this.currentPage===this.totalPages?this._hide(this._pageForwardListItem):this._show(this._pageForwardListItem);
+    this.currentPage===1?this._hide(this._pageBackListItem):this._show(this._pageBackListItem);
     this._updateItemsInfo();
     this._updatePagination();
   }
 
-  _items_per_pageChangedCallback(oldValue,newValue){};
+  _items_per_pageChangedCallback(oldValue, newValue) {
+  };
 
-  _total_itemsChangedCallback(oldValue,newValue){};
+  _total_itemsChangedCallback(oldValue, newValue) {
+    !parseInt(newValue) ? this._hide(this) : this._show(this);
+  }
 
-  _items_per_pageChangeCallback(oldValue,newValue){};
+  _hide(element) {
+    element.style.display = "none";
+  }
 
+  _show(element) {
+    element.style.display = '';
+  }
+
+  _items_per_pageChangeCallback(oldValue, newValue) {
+  }
+  ;
 
   _current_pageChangedCallback(oldValue, newValue) {
     this.dispatchEvent(new CustomEvent('pagechanged',
-        {detail: {oldPage: oldValue, newPage: newValue},bubbles: true}));
+        {detail: {oldPage: oldValue, newPage: newValue}, bubbles: true}));
   }
 
   _updateItemsInfo() {
@@ -116,8 +130,9 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _renderPageLinks() {
-    const pages = this._calculatePagination(this.currentPage, this.totalPages);
-    return html`${pages.map((pageNr) => this._renderPageLink(pageNr))}`;
+    const pages = this._calculatePagination(this.currentPage,
+        this.totalPages);
+    return html`${pages.length>1?pages.map((pageNr) => this._renderPageLink(pageNr)):''}`;
   }
 
   _renderPageLink(number) {
@@ -178,7 +193,11 @@ export class VlPager extends VlElement(HTMLElement) {
    * @return {number}
    */
   get _firstItemNrOfPage() {
-    return (this.currentPage - 1) * this.itemsPerPage + 1
+    if (!this.totalItems) {
+      return 0;
+    } else {
+      return (this.currentPage - 1) * this.itemsPerPage + 1
+    }
   }
 
   /**
@@ -188,6 +207,14 @@ export class VlPager extends VlElement(HTMLElement) {
   get _lastItemNrOfPage() {
     const lastItemNr = this._firstItemNrOfPage + this.itemsPerPage - 1;
     return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
+  }
+
+  get _pageBackListItem() {
+    return this.shadowRoot.querySelector("#pageBackListItem");
+  }
+
+  get _pageForwardListItem() {
+    return this.shadowRoot.querySelector("#pageForwardListItem");
   }
 
   //https://gist.github.com/kottenator/9d936eb3e4e3c3e02598 TODO:vervangen door een dependency?
@@ -223,4 +250,9 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 }
 
-define('vl-pager', VlPager);
+define(
+    'vl-pager'
+    ,
+    VlPager
+)
+;
