@@ -9,14 +9,14 @@ import {html, render} from '/node_modules/lite-html/lite-html.js';
  *
  * @extends VlElement
  *
- * @property {number} total-items - Attribuut wordt gebruikt om totaal rijen te bepalen.
+ * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
  * @property {number} items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
  *
  * @property {boolean} align-center
  * @property {boolean} align-right
  *
- * @event pagechanged - Als de huidge pagina nummer verandert.
+ * @event pagechanged - Als de huidge nummer van pagina verandert.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
@@ -82,18 +82,12 @@ export class VlPager extends VlElement(HTMLElement) {
     }
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-    this.currentPage===this.totalPages?this._hide(this._pageForwardListItem):this._show(this._pageForwardListItem);
-    this.currentPage===1?this._hide(this._pageBackListItem):this._show(this._pageBackListItem);
-    this._updateItemsInfo();
-    this._updatePagination();
-  }
-
   _items_per_pageChangedCallback(oldValue, newValue) {
+    this._update();
   };
 
   _total_itemsChangedCallback(oldValue, newValue) {
+    this._update();
     !parseInt(newValue) ? this._hide(this) : this._show(this);
   }
 
@@ -105,11 +99,23 @@ export class VlPager extends VlElement(HTMLElement) {
     element.style.display = '';
   }
 
-  _items_per_pageChangeCallback(oldValue, newValue) {
+  _update() {
+    this.currentPage === this.totalPages ?
+        this._hide(this._pageForwardListItem) :
+        this._show(this._pageForwardListItem);
+    this.currentPage === 1 ?
+        this._hide(this._pageBackListItem) :
+        this._show(this._pageBackListItem);
+    this._updateItemsInfo();
+    this._updatePagination();
   }
-  ;
+
+  _items_per_pageChangeCallback(oldValue, newValue) {
+    this._update();
+  }
 
   _current_pageChangedCallback(oldValue, newValue) {
+    this._update();
     this.dispatchEvent(new CustomEvent('pagechanged',
         {detail: {oldPage: oldValue, newPage: newValue}, bubbles: true}));
   }
@@ -132,7 +138,10 @@ export class VlPager extends VlElement(HTMLElement) {
   _renderPageLinks() {
     const pages = this._calculatePagination(this.currentPage,
         this.totalPages);
-    return html`${pages.length>1?pages.map((pageNr) => this._renderPageLink(pageNr)):''}`;
+    return html`${pages.length > 1 ?
+        pages.map((pageNr) => this._renderPageLink(pageNr)) :
+        ''
+        }`;
   }
 
   _renderPageLink(number) {
@@ -250,9 +259,4 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 }
 
-define(
-    'vl-pager'
-    ,
-    VlPager
-)
-;
+define('vl-pager', VlPager);
