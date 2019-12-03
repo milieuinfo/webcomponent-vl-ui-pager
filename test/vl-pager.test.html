@@ -93,7 +93,7 @@
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("total-items",0);
       flush(() => {
-        assert.equal(pager.style.display,"none");
+        assert.equal(pager.shadowRoot.querySelector('.vl-pager').style.display,"none");
         done();
       })
     });
