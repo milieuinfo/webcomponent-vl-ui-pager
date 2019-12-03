@@ -16,7 +16,7 @@ import {html, render} from '/node_modules/lite-html/lite-html.js';
  * @property {boolean} align-center
  * @property {boolean} align-right
  *
- * @event pagechanged - Als de huidge nummer van pagina verandert.
+ * @event pagechanged - Als de huidge pagina van nummer verandert.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}

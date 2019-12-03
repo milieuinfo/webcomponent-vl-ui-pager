@@ -89,7 +89,7 @@
       });
     });
 
-    test('de pager is onzichtbaar als het attribuut totaal-items gelijk aan 0',(done) => {
+    test('de pager is onzichtbaar als het attribuut totaal-items gelijk is aan 0',(done) => {
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("total-items",0);
       flush(() => {
@@ -98,7 +98,7 @@
       })
     });
 
-    test('de backward-button is onzichtbaar als het attribuut current-page gelijk aan 1',(done) => {
+    test('de backward-button is onzichtbaar als het attribuut current-page gelijk is aan 1',(done) => {
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page",1);
       flush(() => {
