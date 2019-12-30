@@ -133,6 +133,38 @@
         });
       })
     });
+
+    test('Als de current-pagina groter dan de totaal paginas, wordt de totaal paginas als current-pagina behandelt',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page", 100);
+      flush(() => {
+        assert.isFalse(pager._pageBackListItem.hidden);
+        assert.isTrue(pager._pageForwardListItem.hidden);
+        assert.equal(pager.totalPages, 10);
+        assert.equal(pager.totalItems, 100);
+        assert.equal(pager.currentPage, 10);
+        assert.equal(pager.itemsPerPage, 10);
+        assert.equal(pager._firstItemNrOfPage, 91);
+        assert.equal(pager._lastItemNrOfPage, 100);
+        done();
+      })
+    });
+
+    test('Als de current-pagina groter dan de totaal paginas, wordt de 1 als current-pagina behandelt',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page", -100);
+      flush(() => {
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
+        assert.equal(pager.totalPages, 10);
+        assert.equal(pager.totalItems, 100);
+        assert.equal(pager.currentPage, 1);
+        assert.equal(pager.itemsPerPage, 10);
+        assert.equal(pager._firstItemNrOfPage, 1);
+        assert.equal(pager._lastItemNrOfPage, 10);
+        done();
+      })
+    })
   });
 </script>
 </body>

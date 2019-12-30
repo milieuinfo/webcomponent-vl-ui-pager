@@ -1,5 +1,5 @@
-import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
-import { html, render } from '/node_modules/lite-html/lite-html.js';
+import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
+import {html, render} from '/node_modules/lite-html/lite-html.js';
 
 /**
  * VlPager
@@ -96,7 +96,7 @@ export class VlPager extends VlElement(HTMLElement) {
   };
 
   _total_itemsChangedCallback(oldValue, newValue) {
-    if (this.totalItems == 0) {
+    if (this.totalItems === 0) {
       this._hide(this._element);
     } else {
       this._show(this._element);
@@ -110,7 +110,7 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _hide(element) {
-    element.hidden = true;;
+    element.hidden = true;
   }
 
   _show(element) {
@@ -133,12 +133,12 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _updatePagination() {
     render(this._renderPageLinks(),
-      this.shadowRoot.querySelector("pages-links"));
+        this.shadowRoot.querySelector("pages-links"));
   }
 
   _updateListItems() {
-    this.currentPage === 1 ? this._hide(this._pageBackListItem) : this._show(this._pageBackListItem);
-    this.currentPage === this.totalPages ? this._hide(this._pageForwardListItem) : this._show(this._pageForwardListItem);
+    this.currentPage <= 1 ? this._hide(this._pageBackListItem) : this._show(this._pageBackListItem);
+    this.currentPage >= this.totalPages ? this._hide(this._pageForwardListItem) : this._show(this._pageForwardListItem);
   }
 
   _renderPageLinks() {
@@ -188,7 +188,13 @@ export class VlPager extends VlElement(HTMLElement) {
    * @return {number}
    */
   get currentPage() {
-    return parseInt(this.getAttribute('current-page'));
+    let pagenr = parseInt(this.getAttribute('current-page'));
+    if(pagenr<1) {
+      return 1;
+    }
+    else {
+      return pagenr <= this.totalPages? pagenr: this.totalPages;
+    }
   }
 
   /**
@@ -231,13 +237,13 @@ export class VlPager extends VlElement(HTMLElement) {
   //https://gist.github.com/kottenator/9d936eb3e4e3c3e02598 TODO:vervangen door een dependency?
   _calculatePagination(c, m) {
     var current = c,
-      last = m,
-      delta = 1,
-      left = current - delta,
-      right = current + delta + 1,
-      range = [],
-      rangeWithDots = [],
-      l;
+        last = m,
+        delta = 1,
+        left = current - delta,
+        right = current + delta + 1,
+        range = [],
+        rangeWithDots = [],
+        l;
 
     for (let i = 1; i <= last; i++) {
       if (i == 1 || i == last || i >= left && i < right) {
