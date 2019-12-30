@@ -106,11 +106,11 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _hide(element) {
-    element.style.display = "none";
+    element.hidden = true;;
   }
 
   _show(element) {
-    element.style.display = '';
+    element.hidden = false;
   }
 
   _update() {

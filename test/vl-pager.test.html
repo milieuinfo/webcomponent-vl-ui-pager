@@ -93,7 +93,7 @@
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("total-items", 0);
       flush(() => {
-        assert.equal(pager.shadowRoot.querySelector('.vl-pager').style.display,"none");
+        assert.isTrue(pager.shadowRoot.querySelector('.vl-pager').hidden);
         done();
       })
     });
@@ -102,8 +102,8 @@
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", 1);
       flush(() => {
-        assert.equal(pager._pageBackListItem.style.display,"none");
-        assert.notEqual(pager._pageForwardListItem.style.display,"none");
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
         done();
       })
     });
@@ -112,8 +112,8 @@
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", 10);
       flush(() => {
-        assert.notEqual(pager._pageBackListItem.style.display,"none");
-        assert.equal(pager._pageForwardListItem.style.display,"none");
+        assert.isFalse(pager._pageBackListItem.hidden);
+        assert.isTrue(pager._pageForwardListItem.hidden);
         done();
       })
     });
@@ -122,13 +122,13 @@
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", 1);
       flush(() => {
-        assert.equal(pager._pageBackListItem.style.display,"none");
-        assert.notEqual(pager._pageForwardListItem.style.display,"none");
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
         debugger;
         pager.setAttribute("items-per-page", 100);
         flush(() => {
-          assert.equal(pager._pageBackListItem.style.display,"none");
-          assert.equal(pager._pageForwardListItem.style.display,"none");
+          assert.isTrue(pager._pageBackListItem.hidden);
+          assert.isTrue(pager._pageForwardListItem.hidden);
           done();
         });
       })
