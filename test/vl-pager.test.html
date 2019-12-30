@@ -91,7 +91,7 @@
 
     test('de pager is onzichtbaar als het attribuut totaal-items gelijk is aan 0',(done) => {
       const pager = fixture('vl-pager-fixture');
-      pager.setAttribute("total-items",0);
+      pager.setAttribute("total-items", 0);
       flush(() => {
         assert.equal(pager.shadowRoot.querySelector('.vl-pager').style.display,"none");
         done();
@@ -100,7 +100,7 @@
 
     test('de backward-button is onzichtbaar als het attribuut current-page gelijk is aan 1',(done) => {
       const pager = fixture('vl-pager-fixture');
-      pager.setAttribute("current-page",1);
+      pager.setAttribute("current-page", 1);
       flush(() => {
         assert.equal(pager._pageBackListItem.style.display,"none");
         assert.notEqual(pager._pageForwardListItem.style.display,"none");
@@ -110,13 +110,29 @@
 
     test('de forward-button is onzichtbaar als de pager al op de laatste pagina staat',(done) => {
       const pager = fixture('vl-pager-fixture');
-      pager.setAttribute("current-page",10);
+      pager.setAttribute("current-page", 10);
       flush(() => {
         assert.notEqual(pager._pageBackListItem.style.display,"none");
         assert.equal(pager._pageForwardListItem.style.display,"none");
         done();
       })
-    })
+    });
+
+    test('de forward-button wordt onzichtbaar als de pager door een wijziging van het aantal items per page op de laatste pagina staat',(done) => {
+      const pager = fixture('vl-pager-fixture');
+      pager.setAttribute("current-page", 1);
+      flush(() => {
+        assert.equal(pager._pageBackListItem.style.display,"none");
+        assert.notEqual(pager._pageForwardListItem.style.display,"none");
+        debugger;
+        pager.setAttribute("items-per-page", 100);
+        flush(() => {
+          assert.equal(pager._pageBackListItem.style.display,"none");
+          assert.equal(pager._pageForwardListItem.style.display,"none");
+          done();
+        });
+      })
+    });
   });
 </script>
 </body>

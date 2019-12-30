@@ -29,10 +29,10 @@
     "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
   },
   "dependencies": {
-    "vl-ui-core": "^2.0.0",
     "@govflanders/vl-ui-pager": "3.9.1",
     "lite-html": "^0.2.4",
-    "replace": "^1.1.1"
+    "replace": "^1.1.1",
+    "vl-ui-core": "^2.3.0"
   },
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
