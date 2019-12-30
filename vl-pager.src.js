@@ -96,8 +96,12 @@ export class VlPager extends VlElement(HTMLElement) {
   };
 
   _total_itemsChangedCallback(oldValue, newValue) {
-    this._update();
-    !parseInt(newValue) ? this._hide(this._element) : this._show(this._element);
+    if (this.totalItems == 0) {
+      this._hide(this._element);
+    } else {
+      this._show(this._element);
+      this._update();
+    }
   }
 
   _current_pageChangedCallback(oldValue, newValue) {
