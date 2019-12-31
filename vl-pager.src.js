@@ -11,9 +11,8 @@ import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
  * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
  * @property {number} items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
- *
- * @property {boolean} align-center
- * @property {boolean} align-right
+ * @property {boolean} align-center - Attribuut wordt gebruikt om de paginatie te centreren.
+ * @property {boolean} align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
  * @event pagechanged - Als de huidge pagina van nummer verandert.
  *
