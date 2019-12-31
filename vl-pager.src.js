@@ -50,7 +50,7 @@ export class VlPager extends VlElement(HTMLElement) {
           </li>
           <li id="pageBackListItem" class="vl-pager__element">
             <a id="pageBackLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
-            <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
+              <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
               Vorige <span id="previous-items-per-page" class="vl-u-visually-hidden"></span>
             </a>
           </li>
@@ -58,7 +58,7 @@ export class VlPager extends VlElement(HTMLElement) {
           <li id="pageForwardListItem" class="vl-pager__element">
             <a id="pageForwardLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
               Volgende <span id="next-items-per-page" class="vl-u-visually-hidden"></span>
-            <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
+              <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
             </a>
           </li>
         </ul>
@@ -105,7 +105,7 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _current_pageChangedCallback(oldValue, newValue) {
-    this._updateListItems();
+    this._update();
     this.dispatchEvent(new CustomEvent('pagechanged', { detail: { oldPage: oldValue, newPage: newValue }, bubbles: true }));
   }
 

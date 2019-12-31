@@ -124,7 +124,6 @@
       flush(() => {
         assert.isTrue(pager._pageBackListItem.hidden);
         assert.isFalse(pager._pageForwardListItem.hidden);
-        debugger;
         pager.setAttribute("items-per-page", 100);
         flush(() => {
           assert.isTrue(pager._pageBackListItem.hidden);
@@ -134,7 +133,7 @@
       })
     });
 
-    test('Als de current-pagina groter dan de totaal paginas, wordt de totaal paginas als current-pagina behandelt',(done) => {
+    test('als de current-pagina groter dan de totaal paginas, wordt de totaal paginas als current-pagina behandelt',(done) => {
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", 100);
       flush(() => {
@@ -150,7 +149,7 @@
       })
     });
 
-    test('Als de current-pagina groter dan de totaal paginas, wordt de 1 als current-pagina behandelt',(done) => {
+    test('als de current-pagina groter dan de totaal paginas, wordt de 1 als current-pagina behandelt',(done) => {
       const pager = fixture('vl-pager-fixture');
       pager.setAttribute("current-page", -100);
       flush(() => {
@@ -164,7 +163,27 @@
         assert.equal(pager._lastItemNrOfPage, 10);
         done();
       })
-    })
+    });
+
+    test('de current page wordt visueel aangeduid door een label in plaats van een link', (done) => {
+      const pager = fixture('vl-pager-fixture');
+      let pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
+      let pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
+      should.exist(pageLink1.querySelector('label'));
+      should.not.exist(pageLink2.querySelector('label'));
+      should.not.exist(pageLink1.querySelector('a'));
+      should.exist(pageLink2.querySelector('a'));
+      pager.addEventListener('pagechanged', () => {
+        pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
+        pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
+        should.not.exist(pageLink1.querySelector('label'));
+        should.exist(pageLink2.querySelector('label'));
+        should.exist(pageLink1.querySelector('a'));
+        should.not.exist(pageLink2.querySelector('a'));
+        done();
+      });
+      pager.shadowRoot.querySelector("#pageForwardLink").click();
+    });
   });
 </script>
 </body>
