@@ -1,5 +1,4 @@
-import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
-import {html, render} from '/node_modules/lite-html/lite-html.js';
+import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
 
 /**
  * VlPager
@@ -44,19 +43,18 @@ export class VlPager extends VlElement(HTMLElement) {
       </style>
       <div class="vl-pager">
         <ul class="vl-pager__list">
-          <li class="vl-pager__element">
-            <span class="vl-u-visually-hidden">Rij</span>
-            <strong id="itemsOfCurrentPageInfo"></strong> van <span id="totalItems"></span>
-          </li>
-          <li id="pageBackListItem" class="vl-pager__element">
-            <a id="pageBackLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
+          <li id="bounds" class="vl-pager__element"></li>
+          <li id="page-back-list-item" class="vl-pager__element">
+            <a id="page-back-link" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
               <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
               Vorige <span id="previous-items-per-page" class="vl-u-visually-hidden"></span>
             </a>
           </li>
-          <pages-links></pages-links>
-          <li id="pageForwardListItem" class="vl-pager__element">
-            <a id="pageForwardLink" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
+
+          <li id="pages" class="vl-pager__element"></li>
+
+          <li id="page-forward-list-item" class="vl-pager__element">
+            <a id="page-forward-link" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
               Volgende <span id="next-items-per-page" class="vl-u-visually-hidden"></span>
               <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
             </a>
@@ -69,16 +67,82 @@ export class VlPager extends VlElement(HTMLElement) {
     this.__addPageForwardLinkListener();
   }
 
+  /**
+   * Geeft het aantal pagina's terug.
+   * 
+   * @returns {Number} Aantal pagina's.
+   */
+  get totalPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  /**
+   * Geeft het totaal aantal items terug.
+   * 
+   * @returns {Number} Totaal aantal items.
+   */
+  get totalItems() {
+    return parseInt(this.getAttribute('total-items'));
+  }
+
+  /**
+   * Geeft het huidige pagina nummer terug.
+   * 
+   * @returns {Number} Huidig pagina nummer.
+   */
+  get currentPage() {
+    let currentPage = parseInt(this.getAttribute('current-page'));
+    if (currentPage < 1) {
+      return 1;
+    } else {
+      return currentPage <= this.totalPages ? currentPage : this.totalPages;
+    }
+  }
+
+  /**
+   * Geeft het aantal items per pagina terug.
+   * 
+   * @returns {Number} Aantal items per pagina.
+   */
+  get itemsPerPage() {
+    return parseInt(this.getAttribute('items-per-page'));
+  }
+
+  get _firstItemNumberOfPage() {
+    if (!this.totalItems) {
+      return 0;
+    } else {
+      return (this.currentPage - 1) * this.itemsPerPage + 1
+    }
+  }
+
+  get _lastItemNumberOfPage() {
+    const lastItemNumber = this._firstItemNumberOfPage + this.itemsPerPage - 1;
+    return lastItemNumber > this.totalItems ? this.totalItems : lastItemNumber;
+  }
+
+  get _boundsElement() {
+    return this.shadowRoot.querySelector('#bounds');
+  }
+
+  get _pagesElement() {
+    return this.shadowRoot.querySelector('#pages');
+  }
+
   get _pageBackLink() {
-    return this.shadowRoot.querySelector('#pageBackLink');
+    return this.shadowRoot.querySelector('#page-back-link');
   }
 
   get _pageForwardLink() {
-    return this.shadowRoot.querySelector('#pageForwardLink');
+    return this.shadowRoot.querySelector('#page-forward-link');
   }
 
-  get _itemsOfCurrentPageInfoElement() {
-    return this.shadowRoot.querySelector('#itemsOfCurrentPageInfo');
+  get _pageBackListItem() {
+    return this.shadowRoot.querySelector("#page-back-list-item");
+  }
+
+  get _pageForwardListItem() {
+    return this.shadowRoot.querySelector("#page-forward-list-item");
   }
 
   get _totalItemsElement() {
@@ -89,6 +153,53 @@ export class VlPager extends VlElement(HTMLElement) {
     const previous = this.shadowRoot.querySelector('#previous-items-per-page');
     const next = this.shadowRoot.querySelector('#next-items-per-page');
     return [previous, next];
+  }
+
+  _getBoundsTemplate() {
+    return `
+      <span class="vl-u-visually-hidden">Rij</span>
+      <strong>${this._firstItemNumberOfPage}-${this._lastItemNumberOfPage}</strong> van ${this.totalItems}
+    `;
+  }
+
+  _getPageTemplate(number) {
+    if (number === this.currentPage) {
+      return this.__getActivePageTemplate(number);
+    } else if (number === 'skipped') {
+      return this.__getSkippedPageTemplate();
+    } else {
+      return this.__getPageTemplate(number);
+    }
+  }
+
+  __getActivePageTemplate(number) {
+    return this._template(`
+      <li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
+        <label>${number}</label>
+      </li>
+    `);
+  }
+
+  __getSkippedPageTemplate() {
+    return this._template(`
+      <li class="vl-pager__element">
+        <div class="vl-pager__element__cta">...</div>
+      </li>
+    `);
+  }
+
+  __getPageTemplate(number) {
+    const template = this._template(`
+      <li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
+        <a href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
+      </li>
+    `);
+    template.firstElementChild.addEventListener('click', () => this.setAttribute('current-page', number));
+    return template;
+  }
+
+  _getItemsPerPageContentTemplate() {
+    return `${this.itemsPerPage} rijen`;
   }
 
   _items_per_pageChangedCallback(oldValue, newValue) {
@@ -118,22 +229,25 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _update() {
-    this._updateItemsInfo();
+    this._updateInfoElement();
     this._updatePagination();
     this._updateListItems();
   }
 
-  _updateItemsInfo() {
-    this._itemsOfCurrentPageInfoElement.innerHTML = `${this._firstItemNrOfPage}-${this._lastItemNrOfPage}`;
-    this._totalItemsElement.innerHTML = this.totalItems;
+  _updateInfoElement() {
+    this._boundsElement.innerHTML = this._getBoundsTemplate();
     this._itemsPerPageElementen.forEach((span) => {
-      span.innerHTML = `${this.itemsPerPage} rijen`
+      span.innerHTML = this._getItemsPerPageContentTemplate();
     });
   }
 
   _updatePagination() {
-    render(this._renderPageLinks(),
-        this.shadowRoot.querySelector("pages-links"));
+    this._pagesElement.innerHTML = '';
+    if (this.totalPages > 1) {
+      const pages = this.__generatePagination(this.currentPage, this.totalPages);
+      const content = pages.map((number) => this._getPageTemplate(number));
+      this._pagesElement.append(...content);
+    }
   }
 
   _updateListItems() {
@@ -141,129 +255,21 @@ export class VlPager extends VlElement(HTMLElement) {
     this.currentPage >= this.totalPages ? this._hide(this._pageForwardListItem) : this._show(this._pageForwardListItem);
   }
 
-  _renderPageLinks() {
-    const pages = this._calculatePagination(this.currentPage, this.totalPages);
-    return html`${pages.length > 1 ? pages.map((pageNr) => this._renderPageLink(pageNr)) : ''}`;
-  }
-
-  _renderPageLink(number) {
-    if (number === this.currentPage) {
-      return html`<li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-                  <label>${number}</label>
-                </li>`;
-    } else if (number === "skipped") {
-      return html`<li class="vl-pager__element"> 
-                    <div class="vl-pager__element__cta">
-                      ...
-                    </div>
-                  </li>`;
-    } else {
-      return html`<li @click=${() => {
-        this.setAttribute('current-page', number)
-      }} name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-                  <a href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
-                </li>`;
+  __generatePagination(currentPage, pageCount) {
+    const delta = 2;
+    const range = [];
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(pageCount - 1, currentPage + delta); i++) {
+      range.push(i);
     }
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get totalPages() {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-
-  get totalItems() {
-    return parseInt(this.getAttribute('total-items'));
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get currentPage() {
-    let pagenr = parseInt(this.getAttribute('current-page'));
-    if(pagenr<1) {
-      return 1;
+    if (currentPage - delta > 2) {
+      range.unshift("skipped");
     }
-    else {
-      return pagenr <= this.totalPages? pagenr: this.totalPages;
+    if (currentPage + delta < pageCount - 1) {
+      range.push("skipped");
     }
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get itemsPerPage() {
-    return parseInt(this.getAttribute('items-per-page'));
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get _firstItemNrOfPage() {
-    if (!this.totalItems) {
-      return 0;
-    } else {
-      return (this.currentPage - 1) * this.itemsPerPage + 1
-    }
-  }
-
-  /**
-   *
-   * @return {number}
-   */
-  get _lastItemNrOfPage() {
-    const lastItemNr = this._firstItemNrOfPage + this.itemsPerPage - 1;
-    return lastItemNr > this.totalItems ? this.totalItems : lastItemNr;
-  }
-
-  get _pageBackListItem() {
-    return this.shadowRoot.querySelector("#pageBackListItem");
-  }
-
-  get _pageForwardListItem() {
-    return this.shadowRoot.querySelector("#pageForwardListItem");
-  }
-
-  //https://gist.github.com/kottenator/9d936eb3e4e3c3e02598 TODO:vervangen door een dependency?
-  _calculatePagination(c, m) {
-    var current = c,
-        last = m,
-        delta = 1,
-        left = current - delta,
-        right = current + delta + 1,
-        range = [],
-        rangeWithDots = [],
-        l;
-
-    for (let i = 1; i <= last; i++) {
-      if (i == 1 || i == last || i >= left && i < right) {
-        range.push(i);
-      }
-    }
-
-    for (let i of range) {
-      if (l) {
-        if (i - l === 2) {
-          rangeWithDots.push(l + 1);
-        } else if (i - l !== 1) {
-          rangeWithDots.push('skipped');
-        }
-      }
-      rangeWithDots.push(i);
-      l = i;
-    }
-
-    return rangeWithDots;
+    range.unshift(1);
+    range.push(pageCount);
+    return range;
   }
 
   __addPageBackLinkListener() {

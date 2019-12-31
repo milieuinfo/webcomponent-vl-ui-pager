@@ -1,80 +1,88 @@
 <!DOCTYPE html>
 <html class="js">
+
 <head>
   <title>vl-pager voorbeeld</title>
   <script type="module" src="demo.js"></script>
   <script type="module" src="../vl-pager.src.js"></script>
 </head>
+
 <body>
-<h1>vl-ui-pager demo</h1>
-<p>
-  <a href="https://overheid.vlaanderen.be/webuniversum/v3/documentation/components/vl-ui-pager">
-    Meer voorbeelden en documentatie</a>.
-</p>
-<div>
-  <h2>Pager</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-pager total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-pager align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+  <h1>vl-ui-pager demo</h1>
+  <p>
+    <a href="https://overheid.vlaanderen.be/webuniversum/v3/documentation/components/vl-ui-pager">
+      Meer voorbeelden en documentatie</a>.
+  </p>
+
+  <div>
+    <h2>Pager</h2>
+    <pre>
+      <code class="line-numbers language-markup">
+        &lt;vl-pager total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+      </code>
+    </pre>
+    <div class="demo">
+      <vl-pager align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+    </div>
   </div>
-</div>
-<div>
-  <h2>Single page</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-pager total-items="10" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-pager align-center total-items="10" items-per-page="10" current-page="1"></vl-pager>
+
+  <div>
+    <h2>Single page</h2>
+    <pre>
+      <code class="line-numbers language-markup">
+        &lt;vl-pager total-items="10" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+      </code>
+    </pre>
+    <div class="demo">
+      <vl-pager align-center total-items="10" items-per-page="10" current-page="1"></vl-pager>
+    </div>
   </div>
-</div>
-<div>
-  <h2>Event listener</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-pager id="demoPager" total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
-      &lt;script&gt;
-      document.querySelector('#dem-pager').addEventListener('pagechanged', (e) =&gt; {
-        console.log("pagechanged", e)
+
+  <div>
+    <h2>Event listener</h2>
+    <pre>
+      <code class="line-numbers language-markup">
+        &lt;vl-pager id="demoPager" total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+        &lt;script&gt;
+        document.querySelector('#dem-pager').addEventListener('pagechanged', (e) =&gt; {
+          console.log("pagechanged", e)
+        });
+        &lt;/script&gt;
+      </code>
+    </pre>
+    <div class="demo">
+      <vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+    </div>
+    <script>
+      document.querySelector('#demoPager').addEventListener('pagechanged', (e) => {
+        console.log("pagechanged", e);
       });
-      &lt;/script&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+    </script>
   </div>
-  <script>
-    document.querySelector('#demoPager').addEventListener('pagechanged', (e) => {
-      console.log("pagechanged", e);
-    });
-  </script>
-</div>
-<div>
-  <h2>Align center</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+
+  <div>
+    <h2>Align center</h2>
+    <pre>
+      <code class="line-numbers language-markup">
+        &lt;vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+      </code>
+    </pre>
+    <div class="demo">
+      <vl-pager id="demoPager" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+    </div>
   </div>
-</div>
-<div>
-  <h2>Align right</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-pager id="demoPager" align-right total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-pager id="demoPager" align-right total-items="100" items-per-page="10" current-page="1"></vl-pager>
+
+  <div>
+    <h2>Align right</h2>
+    <pre>
+      <code class="line-numbers language-markup">
+        &lt;vl-pager id="demoPager" align-right total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+      </code>
+    </pre>
+    <div class="demo">
+      <vl-pager id="demoPager" align-right total-items="100" items-per-page="10" current-page="1"></vl-pager>
+    </div>
   </div>
-</div>
 </body>
+
 </html>
