@@ -11,6 +11,7 @@ import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
  * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
  * @property {number} items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
+ * @property {number} pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen..
  * @property {boolean} align-center - Attribuut wordt gebruikt om de paginatie te centreren.
  * @property {boolean} align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
@@ -23,15 +24,11 @@ import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
  */
 export class VlPager extends VlElement(HTMLElement) {
   static get _observedAttributes() {
-    return ['total-items', 'items-per-page', 'current-page']
+    return ['total-items', 'items-per-page', 'current-page', 'pagination-disabled'];
   }
 
   static get _observedChildClassAttributes() {
     return ['align-center', 'align-right'];
-  }
-
-  get _classPrefix() {
-    return 'vl-pager--';
   }
 
   constructor() {
@@ -44,16 +41,13 @@ export class VlPager extends VlElement(HTMLElement) {
         <ul class="vl-pager__list">
           <li id="bounds" class="vl-pager__element"></li>
           <li id="page-back-list-item" class="vl-pager__element">
-            <a id="page-back-link" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
+            <a id="page-back-link" class="vl-pager__element__cta vl-link vl-link--bold">
               <i class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat" aria-hidden="true"></i>
               Vorige <span id="previous-items-per-page" class="vl-u-visually-hidden"></span>
             </a>
           </li>
-
-          <li id="pages" class="vl-pager__element"></li>
-
           <li id="page-forward-list-item" class="vl-pager__element">
-            <a id="page-forward-link" href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">
+            <a id="page-forward-link" class="vl-pager__element__cta vl-link vl-link--bold">
               Volgende <span id="next-items-per-page" class="vl-u-visually-hidden"></span>
               <i class="vl-link__icon vl-link__icon--after vl-vi vl-vi-arrow-right-fat" aria-hidden="true"></i>
             </a>
@@ -64,6 +58,10 @@ export class VlPager extends VlElement(HTMLElement) {
 
     this.__addPageBackLinkListener();
     this.__addPageForwardLinkListener();
+  }
+
+  get _classPrefix() {
+    return 'vl-pager--';
   }
 
   /**
@@ -120,8 +118,16 @@ export class VlPager extends VlElement(HTMLElement) {
     return lastItemNumber > this.totalItems ? this.totalItems : lastItemNumber;
   }
 
+  get _isPagination() {
+    return this.getAttribute('pagination-disabled') == undefined;
+  }
+
   get _boundsElement() {
     return this.shadowRoot.querySelector('#bounds');
+  }
+
+  get _pagesListElement() {
+    return this.shadowRoot.querySelector('.vl-pager__list');
   }
 
   get _pagesElement() {
@@ -162,12 +168,16 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _getPageTemplate(number) {
-    if (number === this.currentPage) {
-      return this.__getActivePageTemplate(number);
-    } else if (number === 'skipped') {
-      return this.__getSkippedPageTemplate();
+    if (this._isPagination) {
+      if (number === this.currentPage) {
+        return this.__getActivePageTemplate(number);
+      } else if (number === 'skipped') {
+        return this.__getSkippedPageTemplate();
+      } else {
+        return this.__getPageTemplate(number);
+      }
     } else {
-      return this.__getPageTemplate(number);
+      return ``;
     }
   }
 
@@ -187,10 +197,16 @@ export class VlPager extends VlElement(HTMLElement) {
     `);
   }
 
+  __getPagesTemplate() {
+    return this._template(`
+      <li id="pages" class="vl-pager__element"></li>
+    `);
+  }
+
   __getPageTemplate(number) {
     const template = this._template(`
       <li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-        <a href="javascript:void(null);" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
+        <a class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
       </li>
     `);
     template.firstElementChild.addEventListener('click', () => this.setAttribute('current-page', number));
@@ -216,7 +232,14 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _current_pageChangedCallback(oldValue, newValue) {
     this._update();
-    this.dispatchEvent(new CustomEvent('pagechanged', { detail: { oldPage: oldValue, newPage: newValue }, bubbles: true }));
+  }
+
+  _pagination_disabledChangedCallback(oldValue, newValue) {
+    if (newValue !== undefined && this._pagesElement) {
+      this._pagesElement.remove();
+    } else {
+      this._pagesListElement.insertBefore(this.__getPagesTemplate(), this._pageForwardListItem);
+    }
   }
 
   _hide(element) {
@@ -241,11 +264,17 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   _updatePagination() {
-    this._pagesElement.innerHTML = '';
-    if (this.totalPages > 1) {
-      const pages = this.__generatePagination(this.currentPage, this.totalPages);
-      const content = pages.map((number) => this._getPageTemplate(number));
-      this._pagesElement.append(...content);
+    if (this._isPagination) {
+      if (!this._pagesElement) {
+        this._pagesListElement.insertBefore(this.__getPagesTemplate(), this._pageForwardListItem);
+      }
+
+      this._pagesElement.innerHTML = '';
+      if (this.totalPages > 1) {
+        const pages = this.__generatePagination(this.currentPage, this.totalPages);
+        const content = pages.map((number) => this._getPageTemplate(number));
+        this._pagesElement.append(...content);
+      }
     }
   }
 

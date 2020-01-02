@@ -24,145 +24,79 @@
         customElements.whenDefined('vl-pager').then(done);
       });
 
-      test('bevat een container met de juiste class zodat de stijl goed toegepast wordt', () => {
-        const pager = fixture('vl-pager-fixture');
-        assert.isTrue(pager._element.classList.contains("vl-pager"));
-      });
-
-      test('de component bevat de juiste data', () => {
+      test('de component bevat de juiste data die kan opgevraagd worden met getters', () => {
         const pager = fixture('vl-pager-fixture');
         assert.equal(pager.totalPages, 10);
         assert.equal(pager.totalItems, 100);
         assert.equal(pager.currentPage, 1);
         assert.equal(pager.itemsPerPage, 10);
-        assert.equal(pager._firstItemNumberOfPage, 1);
-        assert.equal(pager._lastItemNumberOfPage, 10);
       });
 
-      test('gebruikt het current-page attribuut om te bladeren', () => {
+      test('de huidige items van het totaal aantal items per pagina wordt goed aangeduid', () => {
+        const pager = fixture('vl-pager-fixture');
+        const bounds = pager.shadowRoot.querySelector('#bounds');
+        assert.equal(bounds.innerText, 'Rij 1-10 van 100');
+        pager.setAttribute("current-page", 2);
+        assert.equal(bounds.innerText, 'Rij 11-20 van 100');
+      });
+
+      test('het aantal vorige en aantal voglende rijen is zichtbaar via een verborgen element in kader van WCAG', () => {
         const pager = fixture('vl-pager-fixture');
         pager.setAttribute("current-page", 2);
-        flush(() => {
-          assert.equal(pager.totalPages, 10);
-          assert.equal(pager.totalItems, 100);
-          assert.equal(pager.currentPage, 2);
-          assert.equal(pager.itemsPerPage, 10);
-          assert.equal(pager._firstItemNumberOfPage, 11);
-          assert.equal(pager._lastItemNumberOfPage, 20);
-        });
+        assert.equal(pager._pageBackLink.innerText, 'Vorige 10 rijen');
+        assert.equal(pager._pageForwardLink.innerText, 'Volgende 10 rijen');
       });
 
-      test('deling met de rest', (done) => {
+      test("voor elke niet actieve pagina wordt een link gemaakt zodat er genavigeerd kan worden met maximaal 3 pagina's voor en na de huidige pagina", () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 2);
-        pager.setAttribute("total-items", 199);
-        pager.setAttribute("items-per-page", 99);
-        flush(() => {
-          assert.equal(pager.currentPage, 2);
-          assert.equal(pager.totalPages, 3);
-          assert.equal(pager.totalItems, 199);
-          assert.equal(pager.itemsPerPage, 99);
-          assert.equal(pager._firstItemNumberOfPage, 100);
-          assert.equal(pager._lastItemNumberOfPage, 198);
-          done();
-        });
-      });
-
-      test('forward-button verandert het current-page attribuut en triggert een changed event', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.addEventListener('pagechanged', () => {
-          assert.equal(pager.currentPage, 2);
-          done();
-        });
-        pager.shadowRoot.querySelector("#page-forward-link").click();
-      });
-
-      test('backward-button verandert het current-page attribuut en triggert een changed event', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 2);
-        flush(() => {
-          pager.addEventListener('pagechanged', () => {
-            assert.equal(pager.currentPage, 1);
-            done();
-          });
-          pager.shadowRoot.querySelector("#page-back-link").click();
-        });
-      });
-
-      test('de pager is onzichtbaar als het attribuut totaal-items gelijk is aan 0', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("total-items", 0);
-        flush(() => {
-          assert.isTrue(pager.shadowRoot.querySelector('.vl-pager').hidden);
-          done();
-        })
-      });
-
-      test('de backward-button is onzichtbaar als het attribuut current-page gelijk is aan 1', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 1);
-        flush(() => {
-          assert.isTrue(pager._pageBackListItem.hidden);
-          assert.isFalse(pager._pageForwardListItem.hidden);
-          done();
-        })
-      });
-
-      test('de forward-button is onzichtbaar als de pager al op de laatste pagina staat', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 10);
-        flush(() => {
-          assert.isFalse(pager._pageBackListItem.hidden);
-          assert.isTrue(pager._pageForwardListItem.hidden);
-          done();
-        })
-      });
-
-      test('de forward-button wordt onzichtbaar als de pager door een wijziging van het aantal items per page op de laatste pagina staat', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 1);
-        flush(() => {
-          assert.isTrue(pager._pageBackListItem.hidden);
-          assert.isFalse(pager._pageForwardListItem.hidden);
-          pager.setAttribute("items-per-page", 100);
-          flush(() => {
-            assert.isTrue(pager._pageBackListItem.hidden);
-            assert.isTrue(pager._pageForwardListItem.hidden);
-            done();
-          });
-        })
-      });
-
-      test('als de current-pagina groter dan de totaal paginas, wordt de totaal paginas als current-pagina behandelt', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 100);
-        flush(() => {
-          assert.isFalse(pager._pageBackListItem.hidden);
-          assert.isTrue(pager._pageForwardListItem.hidden);
-          assert.equal(pager.totalPages, 10);
-          assert.equal(pager.totalItems, 100);
-          assert.equal(pager.currentPage, 10);
-          assert.equal(pager.itemsPerPage, 10);
-          assert.equal(pager._firstItemNumberOfPage, 91);
-          assert.equal(pager._lastItemNumberOfPage, 100);
-          done();
-        })
-      });
-
-      test('als de current-pagina groter dan de totaal paginas, wordt de 1 als current-pagina behandelt', (done) => {
-        const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", -100);
-        flush(() => {
-          assert.isTrue(pager._pageBackListItem.hidden);
-          assert.isFalse(pager._pageForwardListItem.hidden);
-          assert.equal(pager.totalPages, 10);
-          assert.equal(pager.totalItems, 100);
-          assert.equal(pager.currentPage, 1);
-          assert.equal(pager.itemsPerPage, 10);
-          assert.equal(pager._firstItemNumberOfPage, 1);
-          assert.equal(pager._lastItemNumberOfPage, 10);
-          done();
-        })
+        let pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
+        let pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
+        let pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
+        let pageLink3 = pager.shadowRoot.querySelector('[data-vl-pager-page="3"]');
+        let pageLink4 = pager.shadowRoot.querySelector('[data-vl-pager-page="4"]');
+        let pageLink5 = pager.shadowRoot.querySelector('[data-vl-pager-page="5"]');
+        let pageLink6 = pager.shadowRoot.querySelector('[data-vl-pager-page="6"]');
+        let pageLink7 = pager.shadowRoot.querySelector('[data-vl-pager-page="7"]');
+        let pageLink8 = pager.shadowRoot.querySelector('[data-vl-pager-page="8"]');
+        let pageLink9 = pager.shadowRoot.querySelector('[data-vl-pager-page="9"]');
+        let pageLink10 = pager.shadowRoot.querySelector('[data-vl-pager-page="10"]');
+        should.exist(pageLink1.querySelector('label'));
+        should.exist(pageLink2.querySelector('a'));
+        should.exist(pageLink3.querySelector('a'));
+        should.not.exist(pageLink4);
+        should.not.exist(pageLink5);
+        should.not.exist(pageLink6);
+        should.not.exist(pageLink7);
+        should.not.exist(pageLink8);
+        should.not.exist(pageLink9);
+        should.exist(pageLink10.querySelector('a'));
+        assert.lengthOf(pageLinkEllipsis, 1);
+        assert.equal(pageLinkEllipsis[0], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[3]);
+        pager.setAttribute("current-page", 5);
+        pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
+        pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
+        pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
+        pageLink3 = pager.shadowRoot.querySelector('[data-vl-pager-page="3"]');
+        pageLink4 = pager.shadowRoot.querySelector('[data-vl-pager-page="4"]');
+        pageLink5 = pager.shadowRoot.querySelector('[data-vl-pager-page="5"]');
+        pageLink6 = pager.shadowRoot.querySelector('[data-vl-pager-page="6"]');
+        pageLink7 = pager.shadowRoot.querySelector('[data-vl-pager-page="7"]');
+        pageLink8 = pager.shadowRoot.querySelector('[data-vl-pager-page="8"]');
+        pageLink9 = pager.shadowRoot.querySelector('[data-vl-pager-page="9"]');
+        pageLink10 = pager.shadowRoot.querySelector('[data-vl-pager-page="10"]');
+        should.exist(pageLink1.querySelector('a'));
+        should.not.exist(pageLink2);
+        should.exist(pageLink3.querySelector('a'));
+        should.exist(pageLink4.querySelector('a'));
+        should.exist(pageLink5.querySelector('label'));
+        should.exist(pageLink6.querySelector('a'));
+        should.exist(pageLink7.querySelector('a'));
+        should.not.exist(pageLink8);
+        should.not.exist(pageLink9);
+        should.exist(pageLink10.querySelector('a'));
+        assert.lengthOf(pageLinkEllipsis, 2);
+        assert.equal(pageLinkEllipsis[0], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[1]);
+        assert.equal(pageLinkEllipsis[1], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[7]);
       });
 
       test('de current page wordt visueel aangeduid door een label in plaats van een link', (done) => {
@@ -173,7 +107,7 @@
         should.not.exist(pageLink2.querySelector('label'));
         should.not.exist(pageLink1.querySelector('a'));
         should.exist(pageLink2.querySelector('a'));
-        pager.addEventListener('pagechanged', () => {
+        pager.addEventListener('click', () => {
           pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
           pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
           should.not.exist(pageLink1.querySelector('label'));
@@ -185,8 +119,92 @@
         pager.shadowRoot.querySelector("#page-forward-link").click();
       });
 
-      // Aantal rijen voor en na unit test
-      // Wanneer het totaal aantal pagina's niet groter is dan 1 worden alleen de bounds gerenderd
+      test('toont een extra pagina met de overblijvende items indien de deling tussen totaal items en items per page niet uitkomt', () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("total-items", 199);
+        pager.setAttribute("items-per-page", 99);
+        assert.equal(pager.totalPages, 3);
+        let bounds = pager.shadowRoot.querySelector('#bounds');
+        assert.equal(bounds.innerText, 'Rij 1-99 van 199');
+        pager.setAttribute("current-page", 2);
+        bounds = pager.shadowRoot.querySelector('#bounds');
+        assert.equal(bounds.innerText, 'Rij 100-198 van 199');
+        pager.setAttribute("current-page", 3);
+        bounds = pager.shadowRoot.querySelector('#bounds');
+        assert.equal(bounds.innerText, 'Rij 199-199 van 199');
+      });
+
+      test('forward-button verandert het current-page attribuut en triggert een click event', (done) => {
+        const pager = fixture('vl-pager-fixture');
+        pager.addEventListener('click', () => {
+          assert.equal(pager.currentPage, 2);
+          done();
+        });
+        pager.shadowRoot.querySelector("#page-forward-link").click();
+      });
+
+      test('backward-button verandert het current-page attribuut en triggert een click event', (done) => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", 2);
+        pager.addEventListener('click', () => {
+          assert.equal(pager.currentPage, 1);
+          done();
+        });
+        pager.shadowRoot.querySelector("#page-back-link").click();
+      });
+
+      test('de pager is onzichtbaar als het attribuut totaal-items gelijk is aan 0', () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("total-items", 0);
+        assert.isTrue(pager.shadowRoot.querySelector('.vl-pager').hidden);
+      });
+
+      test('de backward-button is onzichtbaar als het attribuut current-page gelijk is aan 1', () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", 1);
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
+      });
+
+      test('de forward-button is onzichtbaar als de pager al op de laatste pagina staat', () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", 10);
+        assert.isFalse(pager._pageBackListItem.hidden);
+        assert.isTrue(pager._pageForwardListItem.hidden);
+      });
+
+      test('de forward-button wordt onzichtbaar als de pager door een wijziging van het aantal items per page op de laatste pagina staat', () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", 1);
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
+        pager.setAttribute("items-per-page", 100);
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isTrue(pager._pageForwardListItem.hidden);
+      });
+
+      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current pagina gelijk zijn aan het totaal aantal pagina's", () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", 100);
+        assert.isFalse(pager._pageBackListItem.hidden);
+        assert.isTrue(pager._pageForwardListItem.hidden);
+        assert.equal(pager.currentPage, 10);
+      });
+
+      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current-pagina gelijk zijn aan 1", () => {
+        const pager = fixture('vl-pager-fixture');
+        pager.setAttribute("current-page", -100);
+        assert.isTrue(pager._pageBackListItem.hidden);
+        assert.isFalse(pager._pageForwardListItem.hidden);
+        assert.equal(pager.currentPage, 1);
+      });
+
+      test('met een pagination-disabled attribuut zal geen pagina links bevatten', () => {
+        const pager = fixture('vl-pager-fixture');
+        should.exist(pager._pagesElement);
+        pager.setAttribute('pagination-disabled', '');
+        should.not.exist(pager._pagesElement);
+      });
     });
   </script>
 </body>

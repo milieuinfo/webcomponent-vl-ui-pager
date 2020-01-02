@@ -6285,4 +6285,8 @@ mark,
   display: none;
 }
 
+a {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=style.css.map */
