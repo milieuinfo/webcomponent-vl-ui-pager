@@ -1,7 +1,7 @@
 {
   "name": "vl-ui-pager",
   "version": "0.0.4",
-  "description": "vl-ui-pager",
+  "description": "Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.",
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
     "prepare:util": "npm explore vl-ui-util -- npm run util",

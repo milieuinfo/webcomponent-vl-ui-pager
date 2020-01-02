@@ -1,6 +1,7 @@
 # vl-pager
 ![GitHub issues](https://img.shields.io/github/issues-raw/milieuinfo/webcomponent-vl-ui-pager) ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/milieuinfo/webcomponent-vl-ui-pager) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/milieuinfo/webcomponent-vl-ui-pager)
-vl-ui-pager
+
+Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
 
 ## Installatie
 ```

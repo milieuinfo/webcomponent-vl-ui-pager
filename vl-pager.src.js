@@ -3,8 +3,7 @@ import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
 /**
  * VlPager
  * @class
- * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven,
- * markeer de huidige pagina en voeg navigatie knoppen toe.
+ * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
  *
  * @extends VlElement
  *
