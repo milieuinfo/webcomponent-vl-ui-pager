@@ -24,6 +24,10 @@
         customElements.whenDefined('vl-pager').then(done);
       });
 
+      function trim(text) {
+        return text.replace(/\r?\n|\r/g, ' ');
+      }
+
       test('de component bevat de juiste data die kan opgevraagd worden met getters', () => {
         const pager = fixture('vl-pager-fixture');
         assert.equal(pager.totalPages, 10);
@@ -35,16 +39,16 @@
       test('de huidige items van het totaal aantal items per pagina wordt goed aangeduid', () => {
         const pager = fixture('vl-pager-fixture');
         const bounds = pager.shadowRoot.querySelector('#bounds');
-        assert.equal(bounds.innerText, 'Rij 1-10 van 100');
+        assert.equal(trim(bounds.innerText), 'Rij 1-10 van 100');
         pager.setAttribute("current-page", 2);
-        assert.equal(bounds.innerText, 'Rij 11-20 van 100');
+        assert.equal(trim(bounds.innerText), 'Rij 11-20 van 100');
       });
 
       test('het aantal vorige en aantal voglende rijen is zichtbaar via een verborgen element in kader van WCAG', () => {
         const pager = fixture('vl-pager-fixture');
         pager.setAttribute("current-page", 2);
-        assert.equal(pager._pageBackLink.innerText, 'Vorige 10 rijen');
-        assert.equal(pager._pageForwardLink.innerText, 'Volgende 10 rijen');
+        assert.equal(trim(pager._pageBackLink.innerText), 'Vorige 10 rijen');
+        assert.equal(trim(pager._pageForwardLink.innerText), 'Volgende 10 rijen');
       });
 
       test("voor elke niet actieve pagina wordt een link gemaakt zodat er genavigeerd kan worden met maximaal 3 pagina's voor en na de huidige pagina", () => {
@@ -125,13 +129,13 @@
         pager.setAttribute("items-per-page", 99);
         assert.equal(pager.totalPages, 3);
         let bounds = pager.shadowRoot.querySelector('#bounds');
-        assert.equal(bounds.innerText, 'Rij 1-99 van 199');
+        assert.equal(trim(bounds.innerText), 'Rij 1-99 van 199');
         pager.setAttribute("current-page", 2);
         bounds = pager.shadowRoot.querySelector('#bounds');
-        assert.equal(bounds.innerText, 'Rij 100-198 van 199');
+        assert.equal(trim(bounds.innerText), 'Rij 100-198 van 199');
         pager.setAttribute("current-page", 3);
         bounds = pager.shadowRoot.querySelector('#bounds');
-        assert.equal(bounds.innerText, 'Rij 199-199 van 199');
+        assert.equal(trim(bounds.innerText), 'Rij 199-199 van 199');
       });
 
       test('forward-button verandert het current-page attribuut en triggert een click event', (done) => {
