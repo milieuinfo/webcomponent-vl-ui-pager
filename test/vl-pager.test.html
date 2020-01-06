@@ -187,7 +187,7 @@
         assert.isTrue(pager._pageForwardListItem.hidden);
       });
 
-      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current pagina gelijk zijn aan het totaal aantal pagina's", () => {
+      test("als current-page groter is dan totalPages, wordt current-page op totalPages gezet.", () => {
         const pager = fixture('vl-pager-fixture');
         pager.setAttribute("current-page", 100);
         assert.isFalse(pager._pageBackListItem.hidden);
@@ -195,7 +195,7 @@
         assert.equal(pager.currentPage, 10);
       });
 
-      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current-pagina gelijk zijn aan 1", () => {
+      test("als current-page kleiner is dan 1, wordt current-page op 1 gezet.", () => {
         const pager = fixture('vl-pager-fixture');
         pager.setAttribute("current-page", -100);
         assert.isTrue(pager._pageBackListItem.hidden);
