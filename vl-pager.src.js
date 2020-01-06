@@ -32,7 +32,7 @@ export class VlPager extends VlElement(HTMLElement) {
 
   constructor() {
     super();
-    this._shadow(`
+    this.shadow(`
       <style>
         @import "../style.css";
       </style>
@@ -122,40 +122,40 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   get _boundsElement() {
-    return this.shadowRoot.querySelector('#bounds');
+    return this._shadow.querySelector('#bounds');
   }
 
   get _pagesListElement() {
-    return this.shadowRoot.querySelector('.vl-pager__list');
+    return this._shadow.querySelector('.vl-pager__list');
   }
 
   get _pagesElement() {
-    return this.shadowRoot.querySelector('#pages');
+    return this._shadow.querySelector('#pages');
   }
 
   get _pageBackLink() {
-    return this.shadowRoot.querySelector('#page-back-link');
+    return this._shadow.querySelector('#page-back-link');
   }
 
   get _pageForwardLink() {
-    return this.shadowRoot.querySelector('#page-forward-link');
+    return this._shadow.querySelector('#page-forward-link');
   }
 
   get _pageBackListItem() {
-    return this.shadowRoot.querySelector("#page-back-list-item");
+    return this._shadow.querySelector("#page-back-list-item");
   }
 
   get _pageForwardListItem() {
-    return this.shadowRoot.querySelector("#page-forward-list-item");
+    return this._shadow.querySelector("#page-forward-list-item");
   }
 
   get _totalItemsElement() {
-    return this.shadowRoot.querySelector('#totalItems');
+    return this._shadow.querySelector('#totalItems');
   }
 
   get _itemsPerPageElementen() {
-    const previous = this.shadowRoot.querySelector('#previous-items-per-page');
-    const next = this.shadowRoot.querySelector('#next-items-per-page');
+    const previous = this._shadow.querySelector('#previous-items-per-page');
+    const next = this._shadow.querySelector('#next-items-per-page');
     return [previous, next];
   }
 
