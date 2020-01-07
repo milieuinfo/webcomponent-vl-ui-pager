@@ -51,7 +51,7 @@
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "uglify-es": "3.3.9",
+    "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "vl-ui-util": "^3.2.3"
   }
 }
