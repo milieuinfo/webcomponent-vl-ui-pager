@@ -195,7 +195,7 @@
         assert.equal(pager.currentPage, 10);
       });
 
-      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current-pagina gelijk zijn aan 1", () => {
+      test("als de current-pagina kleiner is dan het totaal aantal pagina's, zal de current-pagina gelijk zijn aan 1", () => {
         const pager = fixture('vl-pager-fixture');
         pager.setAttribute("current-page", -100);
         assert.isTrue(pager._pageBackListItem.hidden);
