@@ -40,7 +40,7 @@
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
     "np": "3.0.4",
-    "uglify-js": "3.3.9",
+    "uglify-es": "3.3.9",
     "vl-ui-util": "^3.2.3"
   }
 }
