@@ -1,13 +1,25 @@
 {
   "name": "vl-ui-pager",
   "version": "0.0.4",
+  "main": "index.js",
   "description": "Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.",
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
     "prepare:util": "npm explore vl-ui-util -- npm run util",
     "pretest": "npm install chromedriver --chromedriver-force-download",
-    "test": "wct -l chrome,firefox --npm",
-    "test:grid": "echo TODO",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "wct --config-file ./wct.local.conf.json",
+    "test:e2e": "npm run test:server:start && npm run test:e2e:chrome && npm run test:e2e:firefox",
+    "test:e2e:grid": "npm run test:server:start && npm run test:e2e:chrome:grid && npm run test:e2e:firefox:grid",
+    "test:grid": "wct --config-file ./wct.docker.conf.json && npm run test:e2e:grid",
+    "posttest:e2e": "pkill -f http-server",
+    "test:e2e:chrome": "mocha --chrome ",
+    "test:e2e:chrome:grid": "mocha  --chrome --grid",
+    "test:e2e:firefox": "mocha --firefox",
+    "test:e2e:firefox:grid": "mocha --firefox --grid",
+    "test:e2e:opera": "mocha --opera",
+    "test:e2e:safari": "mocha --safari",
+    "test:server:start": "http-server &",
     "release": "np",
     "release:prepare": "npm run release:prepare:build && npm run release:prepare:imports && npm run release:prepare:css && npm run release:prepare:commit",
     "release:prepare:build": "uglifyjs --compress --mangle --output vl-pager.js -- *.src.js",
@@ -39,7 +51,6 @@
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "np": "3.0.4",
     "uglify-es": "3.3.9",
     "vl-ui-util": "^3.2.3"
   }
