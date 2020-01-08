@@ -14,8 +14,6 @@ import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
  * @property {boolean} align-center - Attribuut wordt gebruikt om de paginatie te centreren.
  * @property {boolean} align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
- * @event pagechanged - Als de huidge pagina van nummer verandert.
- *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-pager.html|Demo}
