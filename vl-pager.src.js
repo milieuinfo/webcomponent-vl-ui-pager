@@ -35,7 +35,7 @@ export class VlPager extends VlElement(HTMLElement) {
         @import "../style.css";
       </style>
       <div class="vl-pager">
-        <ul class="vl-pager__list">
+        <ul id="pager-list" class="vl-pager__list">
           <li id="bounds" class="vl-pager__element"></li>
           <li id="page-back-list-item" class="vl-pager__element">
             <a id="page-back-link" class="vl-pager__element__cta vl-link vl-link--bold">
