@@ -66,7 +66,7 @@ describe('vl-pager', async () => {
         await pager.reset();
     });
 
-    it('ik kan naar de eeerste pagina navigeren', async () => {
+    it('ik kan naar de eerste pagina navigeren', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await pager.goToLastPage();
         const currentPage = await pager.getCurrentPageNumber();
