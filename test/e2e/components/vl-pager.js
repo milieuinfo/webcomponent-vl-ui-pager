@@ -25,8 +25,7 @@ class VlPager extends VlElement {
     }
 
     async _navigateUntilPagenumberIsClickable(pageNumber) {
-        const boolean = await this._pageNumberIsDisplayed(pageNumber);
-        if(boolean) {
+        if(await this._pageNumberIsDisplayed(pageNumber)) {
             return Promise.resolve();
         } else {
             await this.volgende()
