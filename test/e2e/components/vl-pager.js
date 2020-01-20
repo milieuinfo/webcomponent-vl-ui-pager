@@ -42,12 +42,12 @@ class VlPager extends VlElement {
         return bounds.getText();
     }
 
-    async pageForwardLink() {
+    async _pageForwardLink() {
         const pagerList = await this._getPagerList();
         return pagerList.findElement(By.css('#page-forward-list-item'));
     }
 
-    async pageBackLink() {
+    async _pageBackLink() {
         const pagerList = await this._getPagerList();
         return pagerList.findElement(By.css('#page-back-list-item'));
     }
@@ -69,12 +69,12 @@ class VlPager extends VlElement {
     }
 
     async volgende() {
-        const volgendeLink = await this.pageForwardLink();
+        const volgendeLink = await this._pageForwardLink();
         return volgendeLink.click();
     }
 
     async vorige() {
-        const vorigeLink = await this.pageBackLink();
+        const vorigeLink = await this._pageBackLink();
         return vorigeLink.click();
     }
 

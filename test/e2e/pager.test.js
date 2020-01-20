@@ -24,7 +24,7 @@ describe('vl-pager', async () => {
     it('als ik van de eerste pagina naar de volgende ga, dan verschijnt de vorige-link', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await pager.volgende();
-        await (await pager.pageBackLink()).isDisplayed();
+        await (await pager._pageBackLink()).isDisplayed();
         await pager.reset();
     });
 
