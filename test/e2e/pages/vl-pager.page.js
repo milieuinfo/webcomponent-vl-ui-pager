@@ -7,6 +7,10 @@ class VlPagerPage extends Page {
         return new VlPager(this.driver, selector);
     }
 
+    async getDefaultPager() {
+        return this._getPager('#pager-default');
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-pager.html');
     }
