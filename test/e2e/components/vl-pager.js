@@ -1,4 +1,5 @@
 const { VlElement } = require('vl-ui-core');
+const { By } = require('selenium-webdriver');
 
 class VlPager extends VlElement {  
 
@@ -16,24 +17,66 @@ class VlPager extends VlElement {
         return pagerList.findElement(By.css('#pages'));
     }
 
-    async _getPageForwardLink() {
+    async _pageNumberIsDisplayed(number) {
+        const pages = await this._getPages();
+        const pageNumberElements = await pages.findElements(By.css('li'));
+        const displayedNumbers = await Promise.all(pageNumberElements.map(e => e.getText()))
+        return displayedNumbers.includes(number);
+    }
+
+    async _navigateUntilPagenumberIsClickable(pageNumber) {
+        const boolean = await this._pageNumberIsDisplayed(pageNumber);
+        if(boolean) {
+            return Promise.resolve();
+        } else {
+            await this.volgende()
+            return this._navigateUntilPagenumberIsClickable(pageNumber);
+        }
+    }
+
+    async _getTagName(element) {
+        return this.driver.executeScript('return arguments[0].children[0].tagName', element);
+    }
+  
+    async _boundsText() {
+        const bounds = await this._getBounds();
+        return bounds.getText();
+    }
+
+    async pageForwardLink() {
         const pagerList = await this._getPagerList();
         return pagerList.findElement(By.css('#page-forward-list-item'));
     }
 
-    async _getPageBackLink() {
+    async pageBackLink() {
         const pagerList = await this._getPagerList();
         return pagerList.findElement(By.css('#page-back-list-item'));
     }
 
-    async _getTagName(element) {
-        return this.driver.executeScript('return arguments[0].children[0].tagName', firstPage);
+    // State resetten voor testen, puur voor leesbaarheid
+    async reset() {
+        return this.goToFirstPage();
     }
 
-    async getNumberOfPages() {
-        const bounds = await this._getBounds();
-        const text = await bounds.getText();
+    async getTotalResults() {
+        const text = await this._boundsText();
         return text.split(" ")[2];
+    }
+
+    async getTotalOfDisplayedResults() {
+        const text = await this._boundsText();
+        const bounds = text.split(" ")[0];
+        return bounds.split("-")[1];
+    }
+
+    async volgende() {
+        const volgendeLink = await this.pageForwardLink();
+        return volgendeLink.click();
+    }
+
+    async vorige() {
+        const vorigeLink = await this.pageBackLink();
+        return vorigeLink.click();
     }
 
     async getCurrentPageNumber() {
@@ -68,7 +111,10 @@ class VlPager extends VlElement {
     }
 
     async goToPage(pageNumber) {
-        
+        await this._navigateUntilPagenumberIsClickable(pageNumber);
+        const pages = await this._getPages();
+        const page = await pages.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"]'));
+        return page.click();
     }
 }
 
