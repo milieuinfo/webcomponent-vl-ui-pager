@@ -1,8 +1,27 @@
 {
   "name": "vl-ui-pager",
   "version": "1.0.1",
-  "main": "index.js",
   "description": "Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.",
+  "author": "DIDM",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "exports": {
+    "require": "./index.js",
+    "import": "./src/index.js",
+    "node": "./index.js",
+    "default": "./index.js"
+  },
+  "homepage": "https://github.com/milieuinfo/webcomponent-vl-ui-pager#readme",
+  "bugs": {
+    "url": "https://github.com/milieuinfo/webcomponent-vl-ui-pager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milieuinfo/webcomponent-vl-ui-pager.git"
+  },
+  "publishConfig": {
+    "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
+  },
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
     "prepare:util": "npm explore vl-ui-util -- npm run util",
@@ -12,43 +31,42 @@
     "test:e2e:grid": "npm run test:server:start && npm run test:e2e:chrome:grid && npm run test:e2e:firefox:grid",
     "test:grid": "wct --config-file ./wct.docker.conf.json && npm run test:e2e:grid",
     "posttest:e2e": "pkill -f http-server",
-    "test:e2e:chrome": "mocha --chrome ",
-    "test:e2e:chrome:grid": "mocha  --chrome --grid",
+    "test:e2e:chrome": "mocha --chrome",
+    "test:e2e:chrome:grid": "mocha --chrome --grid",
     "test:e2e:firefox": "mocha --firefox",
     "test:e2e:firefox:grid": "mocha --firefox --grid",
     "test:e2e:opera": "mocha --opera",
     "test:e2e:safari": "mocha --safari",
     "test:server:start": "http-server &",
     "release": "np",
-    "release:prepare": "npm run release:prepare:build && npm run release:prepare:css && npm run release:prepare:commit",
-    "release:prepare:build": "minify *.src.js > vl-pager.js",
-    "release:prepare:css": "replace '\\.\\./style.css' '/node_modules/vl-ui-pager/style.css' vl-pager.js",
-    "release:prepare:commit": "git add -f vl-pager.js && git commit --amend --no-edit && git pull",
+    "release:prepare": "npm run release:prepare:build && npm run release:prepare:commit",
+    "release:prepare:build": "npm run release:prepare:build:es6 && npm run release:prepare:build:es6:min && npm run release:prepare:build:node",
+    "release:prepare:build:es6": "npm run release:prepare:build:es6:copy && npm run release:prepare:build:es6:replace",
+    "release:prepare:build:es6:copy": "cp -R -f ./src/*.src.js ./vl-pager.js",
+    "release:prepare:build:es6:replace": "replace '\\.\\./style.css' '/node_modules/vl-ui-pager/style.css' vl-pager.js",
+    "release:prepare:build:es6:min": "npm run release:prepare:build:es6:min:copy && npm run release:prepare:build:es6:min:explode && npm run release:prepare:build:es6:min:minify",
+    "release:prepare:build:es6:min:copy": "cp -R -f ./src/*.src.js ./vl-pager.tmp.min.js",
+    "release:prepare:build:es6:min:explode": "npm explore vl-ui-util -- npm run explode -- --fileName=vl-pager.tmp.min.js",
+    "release:prepare:build:es6:min:minify": "minify ./vl-pager.tmp.min.js > ./vl-pager.min.js && rm -rf vl-pager.tmp.min.js",
+    "release:prepare:build:node": "npm run release:prepare:build:node:copy && npm run release:prepare:build:node:replace && npm run release:prepare:build:node:explode",
+    "release:prepare:build:node:copy": "cp -R -f ./src/*.src.js .",
+    "release:prepare:build:node:replace": "npm run release:prepare:build:node:replace:src && npm run release:prepare:build:node:replace:dist",
+    "release:prepare:build:node:replace:src": "replace  '/node_modules/vl-ui-(.*)/vl-(.*).js' 'vl-ui-$2' vl-pager.src.js",
+    "release:prepare:build:node:replace:dist": "replace  '/node_modules/(.*)/vl-(.*).js' 'vl-ui-$2.js' vl-pager.src.js",
+    "release:prepare:build:node:explode": "npm explore vl-ui-util -- npm run explode -- --fileName=vl-pager.src.js",
+    "release:prepare:commit": "git add -f . && git commit --amend --no-edit && git pull",
     "release:testless": "np --yolo",
     "demo": "http-server"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/milieuinfo/webcomponent-vl-ui-pager.git"
-  },
-  "author": "DIDM",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/milieuinfo/webcomponent-vl-ui-pager/issues"
-  },
-  "homepage": "https://github.com/milieuinfo/webcomponent-vl-ui-pager#readme",
-  "publishConfig": {
-    "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
-  },
   "dependencies": {
-    "vl-ui-core": "^3.0.0"
+    "vl-ui-core": "^4.0.0"
   },
   "peerDependencies": {
-    "vl-ui-core": "^3.0.0"
+    "vl-ui-core": "^4.0.0"
   },
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "vl-ui-util": "^3.4.4"
+    "vl-ui-util": "^4.0.0"
   }
 }
