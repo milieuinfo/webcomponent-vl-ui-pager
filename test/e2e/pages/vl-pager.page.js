@@ -1,6 +1,6 @@
 const VlPager = require('../components/vl-pager');
-const { Page } = require('vl-ui-core');
-const { Config } = require('vl-ui-core');
+const { Page } = require('vl-ui-core').Test;
+const { Config } = require('vl-ui-core').Test;
 
 class VlPagerPage extends Page {
     async _getPager(selector) {

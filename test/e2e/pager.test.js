@@ -1,5 +1,4 @@
-
-const { assert, driver } = require('vl-ui-core').Test;
+const { assert, driver } = require('vl-ui-core').Test.Setup;
 const VlPagerPage = require('./pages/vl-pager.page');
 
 describe('vl-pager', async () => {
@@ -9,6 +8,10 @@ describe('vl-pager', async () => {
         return vlPagerPage.load();
     });
 
+    after(async () => { 
+        return driver.quit();
+    });
+    
     it('als ik kan op volgende klik dan zal de pager naar de volgende pagina gaan', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         const page = await pager.getCurrentPageNumber();
