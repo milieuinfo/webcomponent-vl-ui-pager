@@ -32,7 +32,7 @@ export class VlPager extends VlElement(HTMLElement) {
     super();
     this.shadow(`
       <style>
-        @import "/node_modules/vl-ui-pager/style.css";
+        @import '/node_modules/vl-ui-pager/style.css';
       </style>
       <div class="vl-pager">
         <ul id="pager-list" class="vl-pager__list">
