@@ -43,7 +43,7 @@
     "release:prepare:build": "npm run release:prepare:build:es6 && npm run release:prepare:build:es6:min && npm run release:prepare:build:node",
     "release:prepare:build:es6": "npm run release:prepare:build:es6:copy && npm run release:prepare:build:es6:replace",
     "release:prepare:build:es6:copy": "cp -R -f ./src/*.src.js ./vl-pager.js",
-    "release:prepare:build:es6:replace": "replace '\\.\\./style.css' '/node_modules/vl-ui-pager/style.css' vl-pager.js",
+    "release:prepare:build:es6:replace": "replace \"'/style.css'\" \"'/node_modules/vl-ui-pager/style.css'\" vl-pager.js",
     "release:prepare:build:es6:min": "npm run release:prepare:build:es6:min:copy && npm run release:prepare:build:es6:min:explode && npm run release:prepare:build:es6:min:minify",
     "release:prepare:build:es6:min:copy": "cp -R -f ./src/*.src.js ./vl-pager.tmp.min.js",
     "release:prepare:build:es6:min:explode": "npm explore vl-ui-util -- npm run explode -- --fileName=vl-pager.tmp.min.js",
@@ -67,6 +67,6 @@
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "vl-ui-util": "^4.0.0"
+    "vl-ui-util": "^4.0.3"
   }
 }
