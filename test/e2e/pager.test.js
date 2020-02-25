@@ -8,10 +8,6 @@ describe('vl-pager', async () => {
         return vlPagerPage.load();
     });
 
-    after(async () => { 
-        return driver.quit();
-    });
-    
     it('als ik kan op volgende klik dan zal de pager naar de volgende pagina gaan', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         const page = await pager.getCurrentPageNumber();

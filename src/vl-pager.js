@@ -1,4 +1,4 @@
-import { VlElement, define } from '/node_modules/vl-ui-core/vl-core.js';
+import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
 
 /**
  * VlPager
@@ -32,7 +32,7 @@ export class VlPager extends VlElement(HTMLElement) {
     super();
     this.shadow(`
       <style>
-        @import '/style.css';
+        @import '/src/style.css';
       </style>
       <div class="vl-pager">
         <ul id="pager-list" class="vl-pager__list">
