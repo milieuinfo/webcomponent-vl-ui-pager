@@ -39,34 +39,19 @@
     "test:e2e:safari": "mocha --safari",
     "test:server:start": "http-server &",
     "release": "np",
-    "release:prepare": "npm run release:prepare:build && npm run release:prepare:commit",
-    "release:prepare:build": "npm run release:prepare:build:es6 && npm run release:prepare:build:es6:min && npm run release:prepare:build:node",
-    "release:prepare:build:es6": "npm run release:prepare:build:es6:copy && npm run release:prepare:build:es6:replace",
-    "release:prepare:build:es6:copy": "cp -R -f ./src/*.src.js ./vl-pager.js",
-    "release:prepare:build:es6:replace": "replace \"'/style.css'\" \"'/node_modules/vl-ui-pager/style.css'\" vl-pager.js",
-    "release:prepare:build:es6:min": "npm run release:prepare:build:es6:min:copy && npm run release:prepare:build:es6:min:explode && npm run release:prepare:build:es6:min:minify",
-    "release:prepare:build:es6:min:copy": "cp -R -f ./src/*.src.js ./vl-pager.tmp.min.js",
-    "release:prepare:build:es6:min:explode": "npm explore vl-ui-util -- npm run explode -- --fileName=vl-pager.tmp.min.js",
-    "release:prepare:build:es6:min:minify": "minify ./vl-pager.tmp.min.js > ./vl-pager.min.js && rm -rf vl-pager.tmp.min.js",
-    "release:prepare:build:node": "npm run release:prepare:build:node:copy && npm run release:prepare:build:node:replace && npm run release:prepare:build:node:explode",
-    "release:prepare:build:node:copy": "cp -R -f ./src/*.src.js .",
-    "release:prepare:build:node:replace": "npm run release:prepare:build:node:replace:src && npm run release:prepare:build:node:replace:dist",
-    "release:prepare:build:node:replace:src": "replace  '/node_modules/vl-ui-(.*)/vl-(.*).js' 'vl-ui-$2' vl-pager.src.js",
-    "release:prepare:build:node:replace:dist": "replace  '/node_modules/(.*)/vl-(.*).js' 'vl-ui-$2.js' vl-pager.src.js",
-    "release:prepare:build:node:explode": "npm explore vl-ui-util -- npm run explode -- --fileName=vl-pager.src.js",
-    "release:prepare:commit": "git add -f vl-* && git commit --amend --no-edit && git pull",
+    "release:prepare": "npm explore vl-ui-util -- npm run release-component:prepare $(pwd) pager",
     "release:testless": "np --yolo",
     "demo": "http-server"
   },
   "dependencies": {
-    "vl-ui-core": "^4.0.0"
+    "vl-ui-core": "^5.0.1"
   },
   "peerDependencies": {
-    "vl-ui-core": "^4.0.0"
+    "vl-ui-core": "^5.0.1"
   },
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "vl-ui-util": "^4.0.3"
+    "vl-ui-util": "^5.0.7"
   }
 }
