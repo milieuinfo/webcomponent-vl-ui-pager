@@ -1,3 +1,3 @@
 module.exports = { 
-	VlPager: require('../vl-button.pager.js').VlPage,
+	VlPager: require('../dist/vl-pager.src.js').VlPager,
 }
