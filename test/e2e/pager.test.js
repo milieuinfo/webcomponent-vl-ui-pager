@@ -86,8 +86,15 @@ describe('vl-pager', async () => {
         await assert.eventually.equal(pager.getRange(), "11-20");
         await pager.goToPreviousPage();
         await assert.eventually.equal(pager.getRange(), "1-10");
-
     });
 
-    
+
+    it('Als gebruiker zie ik de range en het totaal aantal items voor een single page resultaat', async() => {
+        const pager = await vlPagerPage.getSinglePager();
+
+        await assert.eventually.equal(pager.getRange(), "1-10");
+        await assert.eventually.equal(pager.getItemsPerpage(), 10);
+        await assert.eventually.equal(pager.getTotalItems(), 10);
+        await assert.eventually.isFalse(pager.isPaginationDisabled());
+    });
 });
