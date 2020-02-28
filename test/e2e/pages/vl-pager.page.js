@@ -22,7 +22,15 @@ class VlPagerPage extends Page {
     async getPagerEventListener() {
         return this._getPager('#pager-event-listener');
     }
-    
+
+    async getPagerCenter() {
+        return this._getPager('#pager-center');
+    }
+
+    async getPagerRight() {
+        return this._getPager('#pager-right');
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-pager.html');
     }

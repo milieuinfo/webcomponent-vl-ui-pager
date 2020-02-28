@@ -61,4 +61,33 @@ describe('vl-pager', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await assert.eventually.equal(pager.getItemsPerpage(), 10);
     });
+
+    it ('Als gebruiker zie ik dat een default pager left gealigneerd is', async() => {
+        const pager = await vlPagerPage.getDefaultPager();
+        await assert.eventually.isTrue(pager.isAlignedLeft());
+    });
+
+    it('Als gebruiker zie ik een pager gecentreerd staat', async() => {
+        const pager = await vlPagerPage.getPagerCenter();
+        await assert.eventually.isTrue(pager.isAlignedCenter());
+    });
+
+    it('Als gebruiker zie ik een pager rechts gealigneerd staat', async() => {
+        const pager = await vlPagerPage.getPagerRight();
+        await assert.eventually.isTrue(pager.isAlignedRight());
+    });
+
+    it('Als gebruiker kan ik op volgende en vorige pagina klikken als de paginatie gedisabled is', async() => {
+        const pager = await vlPagerPage.getPagerZonderPaginaItems();
+        await assert.eventually.isTrue(pager.isPaginationDisabled());
+
+        await assert.eventually.equal(pager.getRange(), "1-10");
+        await pager.goToNextPage();
+        await assert.eventually.equal(pager.getRange(), "11-20");
+        await pager.goToPreviousPage();
+        await assert.eventually.equal(pager.getRange(), "1-10");
+
+    });
+
+    
 });

@@ -3,22 +3,20 @@ const { By } = require('selenium-webdriver');
 
 class VlPager extends VlElement {  
 
-    async getBoundsText() {
-        const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
-        return bounds.getText();
+    async isAlignedCenter() {
+        return this.hasAttribute('align-center');
     }
 
-    async _pageForwardLink() {
-        return this.shadowRoot.findElement(By.css('#page-forward-link'));
+    async isAlignedRight() {
+        return this.hasAttribute('align-right');
     }
 
-    async _pageBackLink() {
-        return this.shadowRoot.findElement(By.css('#page-back-link'));
+    async isAlignedLeft() {
+        return ! await this.isAlignedCenter() && ! await this.isAlignedRight();
     }
 
-    // State resetten voor testen, puur voor leesbaarheid
-    async reset() {
-        return this.goToFirstPage();
+    async isPaginationDisabled() {
+        return this.hasAttribute('pagination-disabled');
     }
 
     async getTotalItems() {
@@ -33,10 +31,9 @@ class VlPager extends VlElement {
     }
     
     async getItemsPerpage() {
-        const fromTo = await this.shadowRoot.findElement(By.css('#bounds strong'));
-        const text = await fromTo.getText();
-        const p = text.split("-");
-        return p[1] - p[0] + 1;
+        const range = await this.getRange();
+        const [begin, eind] = range.split("-");
+        return eind - begin + 1;
     }
 
     async getRange() {
@@ -44,14 +41,7 @@ class VlPager extends VlElement {
         return range.getText();
     }
 
-    async isPaginationDisabled() {
-
-    }
-
-    async getTotalResults() {
-        const text = await this.getBoundsText();
-        return text.split(" ")[2];
-    }
+   
 
     async goToNextPage() {
         const volgendeLink = await this._pageForwardLink();
@@ -71,7 +61,7 @@ class VlPager extends VlElement {
     }
 
     async goToLastPage() {
-        const numberOfPages = Math.ceil(await this.getItemsPerpage() / await this.getTotalResults());
+        const numberOfPages = Math.ceil(await this.getItemsPerpage() / await this.getTotalItems());
         if (await this.getCurrentPage != numberOfPages) {
             const allVisiblePages = await this._getAllVisiblePageNumbers();
             const lastPage = allVisiblePages[allVisiblePages.length - 1];
@@ -110,6 +100,22 @@ class VlPager extends VlElement {
     async _getAllVisiblePageNumbers() {
         return this.shadowRoot.findElements(By.css('#pages li'));
     }
+
+    async _pageForwardLink() {
+        return this.shadowRoot.findElement(By.css('#page-forward-link'));
+    }
+
+    async _pageBackLink() {
+        return this.shadowRoot.findElement(By.css('#page-back-link'));
+    }
+
+    // State resetten voor testen, puur voor leesbaarheid
+    async reset() {
+        return this.goToFirstPage();
+    }
+
+
+    
 }
 
 module.exports = VlPager;
