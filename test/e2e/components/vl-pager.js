@@ -12,22 +12,6 @@ class VlPager extends VlElement {
         return pagerList.findElement(By.css('#pages'));
     }
 
-    async _pageNumberIsDisplayed(number) {
-        const pages = await this._getPages();
-        const pageNumberElements = await pages.findElements(By.css('li'));
-        const displayedNumbers = await Promise.all(pageNumberElements.map(e => e.getText()))
-        return displayedNumbers.includes(number);
-    }
-
-    async _navigateUntilPagenumberIsClickable(pageNumber) {
-        if(await this._pageNumberIsDisplayed(pageNumber)) {
-            return Promise.resolve();
-        } else {
-            await this.goToNextPage()
-            return this._navigateUntilPagenumberIsClickable(pageNumber);
-        }
-    }
-
     async _getTagName(element) {
         return this.driver.executeScript('return arguments[0].children[0].tagName', element);
     }
@@ -68,6 +52,11 @@ class VlPager extends VlElement {
         return p[1] - p[0] + 1;
     }
 
+    async getRange() {
+        const range = await this.shadowRoot.findElement(By.css('#bounds strong'));
+        return range.getText();
+    }
+
     async isPaginationDisabled() {
 
     }
@@ -93,11 +82,9 @@ class VlPager extends VlElement {
         return vorigeLink.click();
     }
 
-    
-
     async goToFirstPage() {
-        const pages = await this._getPages();
-        const firstPage = await pages.findElement(By.css('li[data-vl-pager-page="1"]'))
+        const allVisiblePages = await this._getAllVisiblePages();
+        const firstPage = allVisiblePages[0];
         const tagName = await this._getTagName(firstPage);
         if(tagName == "LABEL") {
             console.log("Already on first page, doing nothing.");
@@ -108,9 +95,8 @@ class VlPager extends VlElement {
     }
 
     async goToLastPage() {
-        const pages = await this._getPages();
-        const allPages = await pages.findElements(By.css('li'));
-        const lastPage = allPages[allPages.length - 1];
+        const allVisiblePages = await this._getAllVisiblePages();
+        const lastPage = allVisiblePages[allVisiblePages.length - 1];
         const tagName = await this._getTagName(lastPage);
         if(tagName == "LABEL") {
             console.log("Already on last page, doing nothing.");
@@ -121,10 +107,35 @@ class VlPager extends VlElement {
     }
 
     async goToPage(pageNumber) {
-        await this._navigateUntilPagenumberIsClickable(pageNumber);
-        const pages = await this._getPages();
-        const page = await pages.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"]'));
+        await this._navigateUntilPagenumberIsVisible(pageNumber);
+        const page = await this.shadowRoot.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"] a'));
         return page.click();
+    }
+
+    async _navigateUntilPagenumberIsVisible(pageNumber) {
+        if (! await this._isPageNumberVisible(pageNumber)) {
+            await this.goToNextPage();
+            return this._navigateUntilPagenumberIsVisible(pageNumber);
+        }
+    }
+
+    async _isPageNumberVisible(pageNumber) {
+        const visiblePageLinks = await this._getAllVisiblePageLinks();
+        for (let visiblePageLink of visiblePageLinks) {
+            const visiblePageNumber = await visiblePageLink.getText();
+            if (visiblePageNumber == pageNumber) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async _getAllVisiblePageLinks() {
+        return this.shadowRoot.findElements(By.css('#pages li a'));
+    }
+
+    async _getAllVisiblePages() {
+        return this.shadowRoot.findElements(By.css('#pages li'));
     }
 }
 

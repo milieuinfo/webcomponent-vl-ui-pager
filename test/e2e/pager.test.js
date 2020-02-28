@@ -21,47 +21,35 @@ describe('vl-pager', async () => {
         await pager.reset();
     });
 
-    it('als ik van de eerste pagina naar de volgende ga, dan verschijnt de vorige-link', async () => {
+    it('Als gebruiker zie ik dat als ik van de eerste pagina naar de volgende ga, dat de vorige-link dan verschijnt', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await pager.goToNextPage();
         await assert.eventually.isTrue( (await pager._pageBackLink()).isDisplayed());
         await pager.reset();
     });
 
-    it('als ik van pagina verwissel, worden de bounds geüpdatet', async () => {
+    it('Als gebruiker zie ik dat, als ik van pagina verwissel, de range wordt geüpdatet', async () => {
         const pager = await vlPagerPage.getDefaultPager();
-        const results = await pager.getTotalOfDisplayedResults();
-        await assert.eventually.equal(pager.getTotalOfDisplayedResults(), 10);
+        await assert.eventually.equal(pager.getRange(), "1-10");
         await pager.goToNextPage();
-        const resultsAfterNavigation = await pager.getTotalOfDisplayedResults();
-        assert.isTrue(resultsAfterNavigation == 20);
+        await assert.eventually.equal(pager.getRange(), "11-20");
         await pager.reset();
     });
 
-    it('ik kan naar een pagina navigeren', async () => {
+    it('Als gebruiker kan ik naar een pagina navigeren', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await pager.goToPage('7');
-        const currentPage = await pager.getCurrentPage();
-        assert.isTrue(currentPage == 7);
+        await assert.eventually.equal(pager.getCurrentPage(), 7);
         await pager.reset();
     });
 
-    it('ik kan naar de laatste pagina navigeren', async () => {
+    it('Als gebruiker kan ik naar de laatste pagina en naar de eerste pagina navigeren', async () => {
         const pager = await vlPagerPage.getDefaultPager();
         await pager.goToLastPage();
-        const currentPage = await pager.getCurrentPage();
-        assert.isTrue(currentPage == 10);
-        await pager.reset();
-    });
-
-    it('ik kan naar de eerste pagina navigeren', async () => {
-        const pager = await vlPagerPage.getDefaultPager();
-        await pager.goToLastPage();
-        const currentPage = await pager.getCurrentPage();
-        assert.isTrue(currentPage == 10);
+        await assert.eventually.equal(pager.getCurrentPage(), 10);
         await pager.goToFirstPage();
-        const firstPage = await pager.getCurrentPage();
-        assert.isTrue(firstPage == 1);
+        await assert.eventually.equal(pager.getCurrentPage(), 1);
+        await pager.reset();
     });
 
     it('Als gebruiker zie ik kan het totaal aantal resultaten', async () => {
