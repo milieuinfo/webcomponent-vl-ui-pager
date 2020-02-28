@@ -3,19 +3,6 @@ const { By } = require('selenium-webdriver');
 
 class VlPager extends VlElement {  
 
-    async _getPagerList() {
-        return this.shadowRoot.findElement(By.css('#pager-list'));
-    }
-
-    async _getPages() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#pages'));
-    }
-
-    async _getTagName(element) {
-        return this.driver.executeScript('return arguments[0].children[0].tagName', element);
-    }
-  
     async getBoundsText() {
         const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
         return bounds.getText();
@@ -66,12 +53,6 @@ class VlPager extends VlElement {
         return text.split(" ")[2];
     }
 
-    async getTotalOfDisplayedResults() {
-        const text = await this.getBoundsText();
-        const bounds = text.split(" ")[0];
-        return bounds.split("-")[1];
-    }
-
     async goToNextPage() {
         const volgendeLink = await this._pageForwardLink();
         return volgendeLink.click();
@@ -83,25 +64,17 @@ class VlPager extends VlElement {
     }
 
     async goToFirstPage() {
-        const allVisiblePages = await this._getAllVisiblePages();
-        const firstPage = allVisiblePages[0];
-        const tagName = await this._getTagName(firstPage);
-        if(tagName == "LABEL") {
-            console.log("Already on first page, doing nothing.");
-            return Promise.resolve();
-        } else {
-            return firstPage.click();
+        if (await this.getCurrentPage != 1) {
+            const allVisiblePages = await this._getAllVisiblePageNumbers();
+            return allVisiblePages[0].click();
         }
     }
 
     async goToLastPage() {
-        const allVisiblePages = await this._getAllVisiblePages();
-        const lastPage = allVisiblePages[allVisiblePages.length - 1];
-        const tagName = await this._getTagName(lastPage);
-        if(tagName == "LABEL") {
-            console.log("Already on last page, doing nothing.");
-            return Promise.resolve();
-        } else {
+        const numberOfPages = Math.ceil(await this.getItemsPerpage() / await this.getTotalResults());
+        if (await this.getCurrentPage != numberOfPages) {
+            const allVisiblePages = await this._getAllVisiblePageNumbers();
+            const lastPage = allVisiblePages[allVisiblePages.length - 1];
             return lastPage.click();
         }
     }
@@ -134,7 +107,7 @@ class VlPager extends VlElement {
         return this.shadowRoot.findElements(By.css('#pages li a'));
     }
 
-    async _getAllVisiblePages() {
+    async _getAllVisiblePageNumbers() {
         return this.shadowRoot.findElements(By.css('#pages li'));
     }
 }
