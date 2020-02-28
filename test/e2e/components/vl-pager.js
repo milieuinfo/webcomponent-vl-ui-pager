@@ -7,11 +7,6 @@ class VlPager extends VlElement {
         return this.shadowRoot.findElement(By.css('#pager-list'));
     }
 
-    async _getBounds() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#bounds'));
-    }
-
     async _getPages() {
         const pagerList = await this._getPagerList();
         return pagerList.findElement(By.css('#pages'));
@@ -28,7 +23,7 @@ class VlPager extends VlElement {
         if(await this._pageNumberIsDisplayed(pageNumber)) {
             return Promise.resolve();
         } else {
-            await this.volgende()
+            await this.goToNextPage()
             return this._navigateUntilPagenumberIsClickable(pageNumber);
         }
     }
@@ -37,19 +32,17 @@ class VlPager extends VlElement {
         return this.driver.executeScript('return arguments[0].children[0].tagName', element);
     }
   
-    async _boundsText() {
-        const bounds = await this._getBounds();
+    async getBoundsText() {
+        const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
         return bounds.getText();
     }
 
     async _pageForwardLink() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#page-forward-list-item'));
+        return this.shadowRoot.findElement(By.css('#page-forward-link'));
     }
 
     async _pageBackLink() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#page-back-list-item'));
+        return this.shadowRoot.findElement(By.css('#page-back-link'));
     }
 
     // State resetten voor testen, puur voor leesbaarheid
@@ -57,32 +50,50 @@ class VlPager extends VlElement {
         return this.goToFirstPage();
     }
 
+    async getTotalItems() {
+        const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
+        const text = await bounds.getText();
+        return text.split(" ")[2];
+    }
+
+    async getCurrentPage() {
+        const label = await this.shadowRoot.findElement(By.css('#pages li label'));
+        return label.getText();
+    }
+    
+    async getItemsPerpage() {
+        const fromTo = await this.shadowRoot.findElement(By.css('#bounds strong'));
+        const text = await fromTo.getText();
+        const p = text.split("-");
+        return p[1] - p[0] + 1;
+    }
+
+    async isPaginationDisabled() {
+
+    }
+
     async getTotalResults() {
-        const text = await this._boundsText();
+        const text = await this.getBoundsText();
         return text.split(" ")[2];
     }
 
     async getTotalOfDisplayedResults() {
-        const text = await this._boundsText();
+        const text = await this.getBoundsText();
         const bounds = text.split(" ")[0];
         return bounds.split("-")[1];
     }
 
-    async volgende() {
+    async goToNextPage() {
         const volgendeLink = await this._pageForwardLink();
         return volgendeLink.click();
     }
 
-    async vorige() {
+    async goToPreviousPage() {
         const vorigeLink = await this._pageBackLink();
         return vorigeLink.click();
     }
 
-    async getCurrentPageNumber() {
-        const pages = await this._getPages();
-        const label = await pages.findElement(By.css('label'));
-        return label.getText();
-    }
+    
 
     async goToFirstPage() {
         const pages = await this._getPages();
