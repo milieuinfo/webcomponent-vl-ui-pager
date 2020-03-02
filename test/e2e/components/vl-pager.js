@@ -12,7 +12,9 @@ class VlPager extends VlElement {
     }
 
     async isAlignedLeft() {
-        return ! await this.isAlignedCenter() && ! await this.isAlignedRight();
+        const isAlignedCenter = await this.isAlignedCenter();
+        const isAlignedRight = await this.isAlignedRight();
+        return ! isAlignedCenter && ! isAlignedRight;
     }
 
     async isPaginationDisabled() {
