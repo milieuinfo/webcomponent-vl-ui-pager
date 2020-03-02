@@ -32,7 +32,7 @@ class VlPager extends VlElement {
         return label.getText();
     }
     
-    async getItemsPerpage() {
+    async getItemsPerPage() {
         const range = await this.getRange();
         return range.maximum - range.minimum + 1;
     }
@@ -44,12 +44,8 @@ class VlPager extends VlElement {
         return {
             minimum: min,
             maximum: max
-
         };
     }
-
-   
-
     async goToNextPage() {
         const volgendeLink = await this._pageForwardLink();
         return volgendeLink.click();
@@ -68,7 +64,7 @@ class VlPager extends VlElement {
     }
 
     async goToLastPage() {
-        const numberOfPages = Math.ceil(await this.getItemsPerpage() / await this.getTotalItems());
+        const numberOfPages = Math.ceil(await this.getItemsPerPage() / await this.getTotalItems());
         if (await this.getCurrentPage != numberOfPages) {
             const allVisiblePages = await this._getAllVisiblePageNumbers();
             const lastPage = allVisiblePages[allVisiblePages.length - 1];

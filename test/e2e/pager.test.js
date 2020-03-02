@@ -59,7 +59,7 @@ describe('vl-pager', async () => {
 
     it('Als gebruiker zie ik hoeveel items zichtbaar zijn', async () => {
         const pager = await vlPagerPage.getDefaultPager();
-        await assert.eventually.equal(pager.getItemsPerpage(), 10);
+        await assert.eventually.equal(pager.getItemsPerPage(), 10);
     });
 
     it ('Als gebruiker zie ik dat een default pager left gealigneerd is', async() => {
@@ -92,7 +92,7 @@ describe('vl-pager', async () => {
         const pager = await vlPagerPage.getSinglePager();
 
         await assertRangeMinMaxIsEqualTo(await pager.getRange(), '1', '10');
-        await assert.eventually.equal(pager.getItemsPerpage(), 10);
+        await assert.eventually.equal(pager.getItemsPerPage(), 10);
         await assert.eventually.equal(pager.getTotalItems(), 10);
         await assert.eventually.isFalse(pager.isPaginationDisabled());
     });
