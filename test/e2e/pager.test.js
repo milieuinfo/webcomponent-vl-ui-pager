@@ -30,9 +30,9 @@ describe('vl-pager', async () => {
 
     it('Als gebruiker zie ik dat, als ik van pagina verwissel, de range wordt geüpdatet', async () => {
         const pager = await vlPagerPage.getDefaultPager();
-        await assert.eventually.equal(pager.getRange(), "1-10");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '1', '10');
         await pager.goToNextPage();
-        await assert.eventually.equal(pager.getRange(), "11-20");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '11', '20');
         await pager.reset();
     });
 
@@ -80,21 +80,25 @@ describe('vl-pager', async () => {
     it('Als gebruiker kan ik op volgende en vorige pagina klikken als de paginatie gedisabled is', async() => {
         const pager = await vlPagerPage.getPagerZonderPaginaItems();
         await assert.eventually.isTrue(pager.isPaginationDisabled());
-
-        await assert.eventually.equal(pager.getRange(), "1-10");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '1', '10');
         await pager.goToNextPage();
-        await assert.eventually.equal(pager.getRange(), "11-20");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '11', '20');
         await pager.goToPreviousPage();
-        await assert.eventually.equal(pager.getRange(), "1-10");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '1', '10');
     });
 
 
     it('Als gebruiker zie ik de range en het totaal aantal items voor een single page resultaat', async() => {
         const pager = await vlPagerPage.getSinglePager();
 
-        await assert.eventually.equal(pager.getRange(), "1-10");
+        await assertRangeMinMaxIsEqualTo(await pager.getRange(), '1', '10');
         await assert.eventually.equal(pager.getItemsPerpage(), 10);
         await assert.eventually.equal(pager.getTotalItems(), 10);
         await assert.eventually.isFalse(pager.isPaginationDisabled());
     });
+
+    async function assertRangeMinMaxIsEqualTo(range, minimum, maximum) {
+        await assert.equal(range.minimum, minimum);
+        await assert.equal(range.maximum, maximum)
+    }
 });

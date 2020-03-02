@@ -34,13 +34,18 @@ class VlPager extends VlElement {
     
     async getItemsPerpage() {
         const range = await this.getRange();
-        const [begin, eind] = range.split("-");
-        return eind - begin + 1;
+        return range.maximum - range.minimum + 1;
     }
 
     async getRange() {
         const range = await this.shadowRoot.findElement(By.css('#bounds strong'));
-        return range.getText();
+        const rangeText = await range.getText();
+        const [min, max] = rangeText.split("-");
+        return {
+            minimum: min,
+            maximum: max
+
+        };
     }
 
    
