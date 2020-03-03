@@ -130,9 +130,6 @@ class VlPager extends VlElement {
         return this.shadowRoot.findElement(By.css('#page-back-link'));
     }
 
-
-
-
     // State resetten voor testen, puur voor leesbaarheid
     async reset() {
         return this.goToFirstPage();
