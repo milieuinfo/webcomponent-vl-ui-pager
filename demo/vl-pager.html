@@ -56,9 +56,9 @@
     <h2>Event listener</h2>
     <pre>
       <code class="line-numbers language-markup">
-        &lt;vl-pager align-center total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+        &lt;vl-pager id="pager-event-listener" align-center total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
         &lt;script&gt;
-        document.querySelector('#dem-pager').addEventListener('pagechanged', (e) =&gt; {
+        document.querySelector('#pager-event-listener').addEventListener('pagechanged', (e) =&gt; {
           console.log("pagechanged", e)
         });
         &lt;/script&gt;
