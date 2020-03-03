@@ -67,8 +67,8 @@ class VlPager extends VlElement {
     }
 
     async goToFirstPage() {
-        if (await this.getCurrentPage != 1) {
-            const allVisiblePages = await this._getAllVisiblePageNumbers();
+        if (await this.getCurrentPage() != 1) {
+            const allVisiblePages = await this._getAllVisiblePageLinks();
             return allVisiblePages[0].click();
         }
     }

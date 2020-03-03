@@ -23,6 +23,7 @@ describe('vl-pager', async () => {
 
     it('Als gebruiker zie ik dat als ik van de eerste pagina naar de volgende ga, dat de vorige-link dan verschijnt', async () => {
         const pager = await vlPagerPage.getDefaultPager();
+        await assert.eventually.isFalse( (await pager._pageBackLink()).isDisplayed());
         await pager.goToNextPage();
         await assert.eventually.isTrue( (await pager._pageBackLink()).isDisplayed());
         await pager.reset();
@@ -37,9 +38,10 @@ describe('vl-pager', async () => {
     });
 
     it('Als gebruiker kan ik naar een pagina navigeren', async () => {
+        const pageNumber = 7;
         const pager = await vlPagerPage.getDefaultPager();
-        await pager.goToPage('7');
-        await assert.eventually.equal(pager.getCurrentPage(), 7);
+        await pager.goToPage(pageNumber);
+        await assert.eventually.equal(pager.getCurrentPage(), pageNumber);
         await pager.reset();
     });
 
