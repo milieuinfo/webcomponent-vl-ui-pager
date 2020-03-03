@@ -88,6 +88,14 @@ class VlPager extends VlElement {
         return page.click();
     }
 
+    async isPageBackDisplayed() {
+        return (await this._pageBackLink()).isDisplayed();
+    }
+
+    async isPageNextDisplayed() {
+        return (await this._pageForwardLink()).isDisplayed();
+    }
+
     async _navigateUntilPagenumberIsVisible(pageNumber) {
         if (! await this._isPageNumberVisible(pageNumber)) {
             await this.goToNextPage();
@@ -121,6 +129,9 @@ class VlPager extends VlElement {
     async _pageBackLink() {
         return this.shadowRoot.findElement(By.css('#page-back-link'));
     }
+
+
+
 
     // State resetten voor testen, puur voor leesbaarheid
     async reset() {
