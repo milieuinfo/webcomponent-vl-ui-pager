@@ -22,9 +22,20 @@ class VlPager extends VlElement {
     }
 
     async getTotalItems() {
+        const bounds = await this._getBounds();
+        return bounds.totalItems;
+    }
+
+    async _getBounds() {
         const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
         const text = await bounds.getText();
-        return text.split(" ")[2];
+        let regExp = /(\d+)-(\d+) van (\d+)/;
+        let result = regExp.exec(text);
+        return {
+            minimum: result[1],
+            maximum: result[2],
+            totalItems: result[3]
+        }
     }
 
     async getCurrentPage() {
@@ -38,14 +49,13 @@ class VlPager extends VlElement {
     }
 
     async getRange() {
-        const range = await this.shadowRoot.findElement(By.css('#bounds strong'));
-        const rangeText = await range.getText();
-        const [min, max] = rangeText.split("-");
+        const bounds = await this._getBounds();
         return {
-            minimum: min,
-            maximum: max
+            minimum: bounds.minimum,
+            maximum: bounds.maximum
         };
     }
+    
     async goToNextPage() {
         const volgendeLink = await this._pageForwardLink();
         return volgendeLink.click();
