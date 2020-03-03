@@ -3,53 +3,123 @@ const { By } = require('selenium-webdriver');
 
 class VlPager extends VlElement {  
 
-    async _getPagerList() {
-        return this.shadowRoot.findElement(By.css('#pager-list'));
+    async isAlignedCenter() {
+        return this.hasAttribute('align-center');
+    }
+
+    async isAlignedRight() {
+        return this.hasAttribute('align-right');
+    }
+
+    async isAlignedLeft() {
+        const isAlignedCenter = await this.isAlignedCenter();
+        const isAlignedRight = await this.isAlignedRight();
+        return ! isAlignedCenter && ! isAlignedRight;
+    }
+
+    async isPaginationDisabled() {
+        return this.hasAttribute('pagination-disabled');
+    }
+
+    async getTotalItems() {
+        const bounds = await this._getBounds();
+        return bounds.totalItems;
     }
 
     async _getBounds() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#bounds'));
-    }
-
-    async _getPages() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#pages'));
-    }
-
-    async _pageNumberIsDisplayed(number) {
-        const pages = await this._getPages();
-        const pageNumberElements = await pages.findElements(By.css('li'));
-        const displayedNumbers = await Promise.all(pageNumberElements.map(e => e.getText()))
-        return displayedNumbers.includes(number);
-    }
-
-    async _navigateUntilPagenumberIsClickable(pageNumber) {
-        if(await this._pageNumberIsDisplayed(pageNumber)) {
-            return Promise.resolve();
-        } else {
-            await this.volgende()
-            return this._navigateUntilPagenumberIsClickable(pageNumber);
+        const bounds = await this.shadowRoot.findElement(By.css('#bounds'));
+        const text = await bounds.getText();
+        let regExp = /(\d+)-(\d+) van (\d+)/;
+        let result = regExp.exec(text);
+        return {
+            minimum: result[1],
+            maximum: result[2],
+            totalItems: result[3]
         }
     }
 
-    async _getTagName(element) {
-        return this.driver.executeScript('return arguments[0].children[0].tagName', element);
+    async getCurrentPage() {
+        const label = await this.shadowRoot.findElement(By.css('#pages li label'));
+        return label.getText();
     }
-  
-    async _boundsText() {
+    
+    async getItemsPerPage() {
+        const range = await this.getRange();
+        return range.maximum - range.minimum + 1;
+    }
+
+    async getRange() {
         const bounds = await this._getBounds();
-        return bounds.getText();
+        return {
+            minimum: bounds.minimum,
+            maximum: bounds.maximum
+        };
+    }
+    
+    async goToNextPage() {
+        const volgendeLink = await this._pageForwardLink();
+        return volgendeLink.click();
+    }
+
+    async goToPreviousPage() {
+        const vorigeLink = await this._pageBackLink();
+        return vorigeLink.click();
+    }
+
+    async goToFirstPage() {
+        if (await this.getCurrentPage() != 1) {
+            const allVisiblePages = await this._getAllVisiblePageLinks();
+            return allVisiblePages[0].click();
+        }
+    }
+
+    async goToLastPage() {
+        const numberOfPages = Math.ceil(await this.getItemsPerPage() / await this.getTotalItems());
+        if (await this.getCurrentPage != numberOfPages) {
+            const allVisiblePages = await this._getAllVisiblePageNumbers();
+            const lastPage = allVisiblePages[allVisiblePages.length - 1];
+            return lastPage.click();
+        }
+    }
+
+    async goToPage(pageNumber) {
+        await this._navigateUntilPagenumberIsVisible(pageNumber);
+        const page = await this.shadowRoot.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"] a'));
+        return page.click();
+    }
+
+    async _navigateUntilPagenumberIsVisible(pageNumber) {
+        if (! await this._isPageNumberVisible(pageNumber)) {
+            await this.goToNextPage();
+            return this._navigateUntilPagenumberIsVisible(pageNumber);
+        }
+    }
+
+    async _isPageNumberVisible(pageNumber) {
+        const visiblePageLinks = await this._getAllVisiblePageLinks();
+        for (let visiblePageLink of visiblePageLinks) {
+            const visiblePageNumber = await visiblePageLink.getText();
+            if (visiblePageNumber == pageNumber) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async _getAllVisiblePageLinks() {
+        return this.shadowRoot.findElements(By.css('#pages li a'));
+    }
+
+    async _getAllVisiblePageNumbers() {
+        return this.shadowRoot.findElements(By.css('#pages li'));
     }
 
     async _pageForwardLink() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#page-forward-list-item'));
+        return this.shadowRoot.findElement(By.css('#page-forward-link'));
     }
 
     async _pageBackLink() {
-        const pagerList = await this._getPagerList();
-        return pagerList.findElement(By.css('#page-back-list-item'));
+        return this.shadowRoot.findElement(By.css('#page-back-link'));
     }
 
     // State resetten voor testen, puur voor leesbaarheid
@@ -57,64 +127,8 @@ class VlPager extends VlElement {
         return this.goToFirstPage();
     }
 
-    async getTotalResults() {
-        const text = await this._boundsText();
-        return text.split(" ")[2];
-    }
 
-    async getTotalOfDisplayedResults() {
-        const text = await this._boundsText();
-        const bounds = text.split(" ")[0];
-        return bounds.split("-")[1];
-    }
-
-    async volgende() {
-        const volgendeLink = await this._pageForwardLink();
-        return volgendeLink.click();
-    }
-
-    async vorige() {
-        const vorigeLink = await this._pageBackLink();
-        return vorigeLink.click();
-    }
-
-    async getCurrentPageNumber() {
-        const pages = await this._getPages();
-        const label = await pages.findElement(By.css('label'));
-        return label.getText();
-    }
-
-    async goToFirstPage() {
-        const pages = await this._getPages();
-        const firstPage = await pages.findElement(By.css('li[data-vl-pager-page="1"]'))
-        const tagName = await this._getTagName(firstPage);
-        if(tagName == "LABEL") {
-            console.log("Already on first page, doing nothing.");
-            return Promise.resolve();
-        } else {
-            return firstPage.click();
-        }
-    }
-
-    async goToLastPage() {
-        const pages = await this._getPages();
-        const allPages = await pages.findElements(By.css('li'));
-        const lastPage = allPages[allPages.length - 1];
-        const tagName = await this._getTagName(lastPage);
-        if(tagName == "LABEL") {
-            console.log("Already on last page, doing nothing.");
-            return Promise.resolve();
-        } else {
-            return lastPage.click();
-        }
-    }
-
-    async goToPage(pageNumber) {
-        await this._navigateUntilPagenumberIsClickable(pageNumber);
-        const pages = await this._getPages();
-        const page = await pages.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"]'));
-        return page.click();
-    }
+    
 }
 
 module.exports = VlPager;

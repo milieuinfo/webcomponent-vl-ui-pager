@@ -11,6 +11,26 @@ class VlPagerPage extends Page {
         return this._getPager('#pager-default');
     }
 
+    async getSinglePager() {
+        return this._getPager('#pager-single');
+    }
+
+    async getPagerZonderPaginaItems() {
+        return this._getPager('#pager-no-pagination');
+    }
+
+    async getPagerEventListener() {
+        return this._getPager('#pager-event-listener');
+    }
+
+    async getPagerCenter() {
+        return this._getPager('#pager-center');
+    }
+
+    async getPagerRight() {
+        return this._getPager('#pager-right');
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-pager.html');
     }
