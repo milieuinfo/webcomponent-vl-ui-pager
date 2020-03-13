@@ -1,5 +1,15 @@
 import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
 
+
+/**
+ * Pager changed event
+ * @event VlPager#change
+ * @property {number} currentPage - Huidige pagina.
+ * @property {number} totalPage - Totaal aantal paginas.
+ * @property {number} itemsPerPage - Items per pagina.
+ * @property {number} totalItems - Totaal aantal items.
+ */
+
 /**
  * VlPager
  * @class
@@ -13,6 +23,7 @@ import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @property {number} pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen..
  * @property {boolean} align-center - Attribuut wordt gebruikt om de paginatie te centreren.
  * @property {boolean} align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
+ * 
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
