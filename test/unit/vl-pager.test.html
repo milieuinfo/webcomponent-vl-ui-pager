@@ -209,6 +209,21 @@
         pager.setAttribute('pagination-disabled', '');
         should.not.exist(pager._pagesElement);
       });
+
+      test('er wordt een change event gegooid telkens huidige pagina verandert', () => {
+        const pager = fixture('vl-pager-fixture');
+        const receivedEvents = [];
+        pager.addEventListener('change', e => {
+        	receivedEvents.push(e.detail);
+        });
+        pager.shadowRoot.querySelector("#page-forward-link").click();
+		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "2", totalPage: 10, itemsPerPage: 10, totalItems: 100});
+        pager.shadowRoot.querySelector("#page-back-link").click();
+		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "1", totalPage: 10, itemsPerPage: 10, totalItems: 100});
+		const pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
+        pageLink2.click();
+		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "2", totalPage: 10, itemsPerPage: 10, totalItems: 100});
+      });
     });
   </script>
 </body>

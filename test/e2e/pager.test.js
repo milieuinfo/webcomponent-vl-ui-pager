@@ -1,5 +1,6 @@
 const { assert, driver } = require('vl-ui-core').Test.Setup;
 const VlPagerPage = require('./pages/vl-pager.page');
+const { By } = require('vl-ui-core').Test.Setup;
 
 describe('vl-pager', async () => {
     const vlPagerPage = new VlPagerPage(driver);
@@ -107,6 +108,26 @@ describe('vl-pager', async () => {
         await assert.eventually.equal(pager.getTotalItems(), 10);
         await assert.eventually.isFalse(pager.isPaginationDisabled());
     });
+
+    it('Als gebruiker zie ik dat de pager elke keer als er data verandert een event uitstuurt', async() => {
+        const pager = await vlPagerPage.getPagerEventListener();
+        const logElement = await vlPagerPage.getPagerEventListenerLog()
+        await assert.eventually.lengthOf(logElement.findElements(By.css("span")), 0);
+        await pager.goToNextPage();
+        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"2","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+        await pager.goToPreviousPage();
+        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"1","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+        await pager.goToPage(2);
+        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"2","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+    });
+    
+    async function lastLogLine(logElement) {
+        const logLines = await logElement.findElements(By.css("span"));
+        if (logLines.length > 0) {
+            const lastLogLine = logLines[logLines.length - 1];
+            return lastLogLine.getText();
+        }
+    }
 
     async function assertRangeMinMaxIsEqualTo(range, minimum, maximum) {
         await assert.equal(range.minimum, minimum);

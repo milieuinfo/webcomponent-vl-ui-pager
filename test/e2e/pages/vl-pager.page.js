@@ -1,6 +1,8 @@
 const VlPager = require('../components/vl-pager');
 const { Page } = require('vl-ui-core').Test;
 const { Config } = require('vl-ui-core').Test;
+const { VlElement } = require('vl-ui-core').Test;
+const { By } = require('vl-ui-core').Test.Setup;
 
 class VlPagerPage extends Page {
     async _getPager(selector) {
@@ -21,6 +23,10 @@ class VlPagerPage extends Page {
 
     async getPagerEventListener() {
         return this._getPager('#pager-event-listener');
+    }
+
+    async getPagerEventListenerLog() {
+    	return new VlElement(this.driver, '#pager-event-listener-log');
     }
 
     async getPagerCenter() {
