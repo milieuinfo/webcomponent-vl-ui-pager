@@ -1,6 +1,15 @@
 import { VlElement, define } from 'vl-ui-core';
 
 /**
+ * Pager changed event
+ * @event VlPager#change
+ * @property {number} currentPage - Huidige pagina.
+ * @property {number} totalPage - Totaal aantal paginas.
+ * @property {number} itemsPerPage - Items per pagina.
+ * @property {number} totalItems - Totaal aantal items.
+ */
+
+/**
  * VlPager
  * @class
  * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
@@ -230,6 +239,10 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _current_pageChangedCallback(oldValue, newValue) {
     this._update();
+    if (oldValue && newValue != oldValue) {
+    	const event = {detail: {currentPage: Number(newValue), totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
+    	this.dispatchEvent(new CustomEvent('change', event));
+    }
   }
 
   _pagination_disabledChangedCallback(oldValue, newValue) {
@@ -312,6 +325,9 @@ export class VlPager extends VlElement(HTMLElement) {
         this.setAttribute("current-page", this.currentPage + 1);
       }
     });
+    
+    
+
   }
 }
 
