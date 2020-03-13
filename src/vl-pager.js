@@ -229,6 +229,10 @@ export class VlPager extends VlElement(HTMLElement) {
 
   _current_pageChangedCallback(oldValue, newValue) {
     this._update();
+    if (oldValue && newValue != oldValue) {
+    	const event = {detail: {currentPage: Number(newValue), totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
+    	this.dispatchEvent(new CustomEvent('change', event));
+    }
   }
 
   _pagination_disabledChangedCallback(oldValue, newValue) {
@@ -311,6 +315,9 @@ export class VlPager extends VlElement(HTMLElement) {
         this.setAttribute("current-page", this.currentPage + 1);
       }
     });
+    
+    
+
   }
 }
 

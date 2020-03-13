@@ -57,9 +57,11 @@
     <pre>
       <code class="line-numbers language-markup">
         &lt;vl-pager id="pager-event-listener" align-center total-items="100" items-per-page="10" current-page="1"&gt;&lt;/vl-pager&gt;
+        &lt;div id="pager-event-listener-log&gt;
+        &lt;/div&gt;
         &lt;script&gt;
-        document.querySelector('#pager-event-listener').addEventListener('pagechanged', (e) =&gt; {
-          console.log("pagechanged", e)
+        document.querySelector('#pager-event-listener').addEventListener('change', (e) => {
+          document.querySelector("#pager-event-listener-log").innerText = JSON.stringify(e.detail);
         });
         &lt;/script&gt;
       </code>
@@ -67,9 +69,11 @@
     <div class="demo">
       <vl-pager id="pager-event-listener" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
     </div>
+    <div id="pager-event-listener-log">
+    </div>
     <script>
-      document.querySelector('#pager-event-listener').addEventListener('pagechanged', (e) => {
-        console.log("pagechanged", e);
+      document.querySelector('#pager-event-listener').addEventListener('change', (e) => {
+        document.querySelector("#pager-event-listener-log").innerText = JSON.stringify(e.detail);
       });
     </script>
   </div>
