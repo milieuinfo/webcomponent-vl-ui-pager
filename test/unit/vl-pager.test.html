@@ -210,19 +210,26 @@
         should.not.exist(pager._pagesElement);
       });
 
-      test('er wordt een change event gegooid telkens huidige pagina verandert', () => {
+      test('er wordt een change event gegooid telkens huidige pagina verandert', (done) => {
         const pager = fixture('vl-pager-fixture');
-        const receivedEvents = [];
-        pager.addEventListener('change', e => {
-        	receivedEvents.push(e.detail);
-        });
+        const nextPageListener = e => {
+            assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+            pager.removeEventListener('change', nextPageListener);
+            const previousPageListener = e => {
+                assert.deepEqual(e.detail, {currentPage: 1, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+                pager.removeEventListener('change', previousPageListener);
+                const pageNumberListener = e => {
+                    assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+                    done();			
+                };
+                pager.addEventListener('change', pageNumberListener);
+                pager.shadowRoot.querySelector('[data-vl-pager-page="2"]').click();
+            };
+            pager.addEventListener('change', previousPageListener);
+            pager.shadowRoot.querySelector("#page-back-link").click();
+        };
+        pager.addEventListener('change', nextPageListener);
         pager.shadowRoot.querySelector("#page-forward-link").click();
-		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "2", totalPage: 10, itemsPerPage: 10, totalItems: 100});
-        pager.shadowRoot.querySelector("#page-back-link").click();
-		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "1", totalPage: 10, itemsPerPage: 10, totalItems: 100});
-		const pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
-        pageLink2.click();
-		assert.deepEqual(receivedEvents[receivedEvents.length -1], {currentPage: "2", totalPage: 10, itemsPerPage: 10, totalItems: 100});
       });
     });
   </script>

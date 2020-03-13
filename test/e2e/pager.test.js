@@ -112,23 +112,15 @@ describe('vl-pager', async () => {
     it('Als gebruiker zie ik dat de pager elke keer als er data verandert een event uitstuurt', async() => {
         const pager = await vlPagerPage.getPagerEventListener();
         const logElement = await vlPagerPage.getPagerEventListenerLog()
-        await assert.eventually.lengthOf(logElement.findElements(By.css("span")), 0);
+        await assert.eventually.equal(logElement.getText(), "");
         await pager.goToNextPage();
-        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"2","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+        await assert.eventually.equal(logElement.getText(), '{"currentPage":2,"totalPage":10,"itemsPerPage":10,"totalItems":100}');
         await pager.goToPreviousPage();
-        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"1","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+        await assert.eventually.equal(logElement.getText(), '{"currentPage":1,"totalPage":10,"itemsPerPage":10,"totalItems":100}');
         await pager.goToPage(2);
-        await assert.eventually.equal(lastLogLine(logElement), '{"currentPage":"2","totalPage":10,"itemsPerPage":10,"totalItems":100}');
+        await assert.eventually.equal(logElement.getText(), '{"currentPage":2,"totalPage":10,"itemsPerPage":10,"totalItems":100}');
     });
     
-    async function lastLogLine(logElement) {
-        const logLines = await logElement.findElements(By.css("span"));
-        if (logLines.length > 0) {
-            const lastLogLine = logLines[logLines.length - 1];
-            return lastLogLine.getText();
-        }
-    }
-
     async function assertRangeMinMaxIsEqualTo(range, minimum, maximum) {
         await assert.equal(range.minimum, minimum);
         await assert.equal(range.maximum, maximum)

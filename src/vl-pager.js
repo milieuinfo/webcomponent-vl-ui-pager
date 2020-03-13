@@ -230,7 +230,7 @@ export class VlPager extends VlElement(HTMLElement) {
   _current_pageChangedCallback(oldValue, newValue) {
     this._update();
     if (oldValue && newValue != oldValue) {
-    	const event = {detail: {currentPage: newValue, totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
+    	const event = {detail: {currentPage: Number(newValue), totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
     	this.dispatchEvent(new CustomEvent('change', event));
     }
   }

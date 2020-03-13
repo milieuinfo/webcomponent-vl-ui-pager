@@ -60,8 +60,8 @@
         &lt;div id="pager-event-listener-log&gt;
         &lt;/div&gt;
         &lt;script&gt;
-        document.querySelector('#pager-event-listener').addEventListener('change', (e) =&gt; {
-          console.log("pagechanged", e.detail);
+        document.querySelector('#pager-event-listener').addEventListener('change', (e) => {
+          document.querySelector("#pager-event-listener-log").innerText = JSON.stringify(e.detail);
         });
         &lt;/script&gt;
       </code>
@@ -73,10 +73,7 @@
     </div>
     <script>
       document.querySelector('#pager-event-listener').addEventListener('change', (e) => {
-    	  const span = document.createElement("span");
-    	  const text = document.createTextNode(JSON.stringify(e.detail));
-    	  span.appendChild(text);
-    	  document.querySelector("#pager-event-listener-log").append(span);
+        document.querySelector("#pager-event-listener-log").innerText = JSON.stringify(e.detail);
       });
     </script>
   </div>
