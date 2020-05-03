@@ -47,11 +47,11 @@
     "vl-ui-core": "^5.1.2"
   },
   "peerDependencies": {
-    "vl-ui-core": "^5.0.1"
+    "vl-ui-core": "^5.1.2"
   },
   "devDependencies": {
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.1",
-    "vl-ui-util": "^5.1.6"
+    "vl-ui-util": "github:milieuinfo/webcomponent-vl-ui-util#deleted-demo-code"
   }
 }
