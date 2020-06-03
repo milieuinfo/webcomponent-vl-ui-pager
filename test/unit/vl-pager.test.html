@@ -40,18 +40,18 @@
         const pager = fixture('vl-pager-fixture');
         const bounds = pager.shadowRoot.querySelector('#bounds');
         assert.equal(trim(bounds.innerText), 'Rij 1-10 van 100');
-        pager.setAttribute("current-page", 2);
+        pager.setAttribute('current-page', 2);
         assert.equal(trim(bounds.innerText), 'Rij 11-20 van 100');
       });
 
       test('het aantal vorige en aantal voglende rijen is zichtbaar via een verborgen element in kader van WCAG', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 2);
+        pager.setAttribute('current-page', 2);
         assert.equal(trim(pager._pageBackLink.innerText), 'Vorige 10 rijen');
         assert.equal(trim(pager._pageForwardLink.innerText), 'Volgende 10 rijen');
       });
 
-      test("voor elke niet actieve pagina wordt een link gemaakt zodat er genavigeerd kan worden met maximaal 3 pagina's voor en na de huidige pagina", () => {
+      test('voor elke niet actieve pagina wordt een link gemaakt zodat er genavigeerd kan worden met maximaal 3 pagina\'s voor en na de huidige pagina', () => {
         const pager = fixture('vl-pager-fixture');
         let pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
         let pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
@@ -76,7 +76,7 @@
         should.exist(pageLink10.querySelector('a'));
         assert.lengthOf(pageLinkEllipsis, 1);
         assert.equal(pageLinkEllipsis[0], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[3]);
-        pager.setAttribute("current-page", 5);
+        pager.setAttribute('current-page', 5);
         pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
         pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
         pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
@@ -120,20 +120,20 @@
           should.not.exist(pageLink2.querySelector('a'));
           done();
         });
-        pager.shadowRoot.querySelector("#page-forward-link").click();
+        pager.shadowRoot.querySelector('#page-forward-link').click();
       });
 
       test('toont een extra pagina met de overblijvende items indien de deling tussen totaal items en items per page niet uitkomt', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("total-items", 199);
-        pager.setAttribute("items-per-page", 99);
+        pager.setAttribute('total-items', 199);
+        pager.setAttribute('items-per-page', 99);
         assert.equal(pager.totalPages, 3);
         let bounds = pager.shadowRoot.querySelector('#bounds');
         assert.equal(trim(bounds.innerText), 'Rij 1-99 van 199');
-        pager.setAttribute("current-page", 2);
+        pager.setAttribute('current-page', 2);
         bounds = pager.shadowRoot.querySelector('#bounds');
         assert.equal(trim(bounds.innerText), 'Rij 100-198 van 199');
-        pager.setAttribute("current-page", 3);
+        pager.setAttribute('current-page', 3);
         bounds = pager.shadowRoot.querySelector('#bounds');
         assert.equal(trim(bounds.innerText), 'Rij 199-199 van 199');
       });
@@ -144,60 +144,60 @@
           assert.equal(pager.currentPage, 2);
           done();
         });
-        pager.shadowRoot.querySelector("#page-forward-link").click();
+        pager.shadowRoot.querySelector('#page-forward-link').click();
       });
 
       test('backward-button verandert het current-page attribuut en triggert een click event', (done) => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 2);
+        pager.setAttribute('current-page', 2);
         pager.addEventListener('click', () => {
           assert.equal(pager.currentPage, 1);
           done();
         });
-        pager.shadowRoot.querySelector("#page-back-link").click();
+        pager.shadowRoot.querySelector('#page-back-link').click();
       });
 
       test('de pager is onzichtbaar als het attribuut totaal-items gelijk is aan 0', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("total-items", 0);
+        pager.setAttribute('total-items', 0);
         assert.isTrue(pager.shadowRoot.querySelector('.vl-pager').hidden);
       });
 
       test('de backward-button is onzichtbaar als het attribuut current-page gelijk is aan 1', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 1);
+        pager.setAttribute('current-page', 1);
         assert.isTrue(pager._pageBackListItem.hidden);
         assert.isFalse(pager._pageForwardListItem.hidden);
       });
 
       test('de forward-button is onzichtbaar als de pager al op de laatste pagina staat', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 10);
+        pager.setAttribute('current-page', 10);
         assert.isFalse(pager._pageBackListItem.hidden);
         assert.isTrue(pager._pageForwardListItem.hidden);
       });
 
       test('de forward-button wordt onzichtbaar als de pager door een wijziging van het aantal items per page op de laatste pagina staat', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 1);
+        pager.setAttribute('current-page', 1);
         assert.isTrue(pager._pageBackListItem.hidden);
         assert.isFalse(pager._pageForwardListItem.hidden);
-        pager.setAttribute("items-per-page", 100);
+        pager.setAttribute('items-per-page', 100);
         assert.isTrue(pager._pageBackListItem.hidden);
         assert.isTrue(pager._pageForwardListItem.hidden);
       });
 
-      test("als de current-pagina groter is dan het totaal aantal pagina's, zal de current pagina gelijk zijn aan het totaal aantal pagina's", () => {
+      test('als de current-pagina groter is dan het totaal aantal pagina\'s, zal de current pagina gelijk zijn aan het totaal aantal pagina\'s', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", 100);
+        pager.setAttribute('current-page', 100);
         assert.isFalse(pager._pageBackListItem.hidden);
         assert.isTrue(pager._pageForwardListItem.hidden);
         assert.equal(pager.currentPage, 10);
       });
 
-      test("als de current-pagina kleiner is dan het totaal aantal pagina's, zal de current-pagina gelijk zijn aan 1", () => {
+      test('als de current-pagina kleiner is dan het totaal aantal pagina\'s, zal de current-pagina gelijk zijn aan 1', () => {
         const pager = fixture('vl-pager-fixture');
-        pager.setAttribute("current-page", -100);
+        pager.setAttribute('current-page', -100);
         assert.isTrue(pager._pageBackListItem.hidden);
         assert.isFalse(pager._pageForwardListItem.hidden);
         assert.equal(pager.currentPage, 1);
@@ -212,24 +212,24 @@
 
       test('er wordt een change event gegooid telkens huidige pagina verandert', (done) => {
         const pager = fixture('vl-pager-fixture');
-        const nextPageListener = e => {
-            assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
-            pager.removeEventListener('change', nextPageListener);
-            const previousPageListener = e => {
-                assert.deepEqual(e.detail, {currentPage: 1, totalPage: 10, itemsPerPage: 10, totalItems: 100});
-                pager.removeEventListener('change', previousPageListener);
-                const pageNumberListener = e => {
-                    assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
-                    done();			
-                };
-                pager.addEventListener('change', pageNumberListener);
-                pager.shadowRoot.querySelector('[data-vl-pager-page="2"]').click();
+        const nextPageListener = (e) => {
+          assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+          pager.removeEventListener('change', nextPageListener);
+          const previousPageListener = (e) => {
+            assert.deepEqual(e.detail, {currentPage: 1, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+            pager.removeEventListener('change', previousPageListener);
+            const pageNumberListener = (e) => {
+              assert.deepEqual(e.detail, {currentPage: 2, totalPage: 10, itemsPerPage: 10, totalItems: 100});
+              done();
             };
-            pager.addEventListener('change', previousPageListener);
-            pager.shadowRoot.querySelector("#page-back-link").click();
+            pager.addEventListener('change', pageNumberListener);
+            pager.shadowRoot.querySelector('[data-vl-pager-page="2"]').click();
+          };
+          pager.addEventListener('change', previousPageListener);
+          pager.shadowRoot.querySelector('#page-back-link').click();
         };
         pager.addEventListener('change', nextPageListener);
-        pager.shadowRoot.querySelector("#page-forward-link").click();
+        pager.shadowRoot.querySelector('#page-forward-link').click();
       });
     });
   </script>
