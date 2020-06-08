@@ -110,9 +110,9 @@ describe('vl-pager', async () => {
 
   it('Als gebruiker zie ik dat de pager elke keer als er data verandert een event uitstuurt', async () => {
     const pager = await vlPagerPage.getPagerEventListener();
-    await pager.scrollIntoView();
     const logElement = await vlPagerPage.getPagerEventListenerLog();
     await assert.eventually.equal(logElement.getText(), '');
+    await pager.scrollIntoView();
     await pager.goToNextPage();
     await assert.eventually.equal(logElement.getText(), '{"currentPage":2,"totalPage":10,"itemsPerPage":10,"totalItems":100}');
     await pager.goToPreviousPage();
