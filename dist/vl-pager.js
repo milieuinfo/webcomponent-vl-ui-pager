@@ -1,4 +1,4 @@
-import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 
 /**
  * Pager changed event
@@ -14,7 +14,8 @@ import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @class
  * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
  *
- * @extends VlElement
+ * @extends HTMLElement
+ * @mixin vlElement
  *
  * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
@@ -28,7 +29,7 @@ import { VlElement, define } from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-pager.html|Demo}
  *
  */
-export class VlPager extends VlElement(HTMLElement) {
+export class VlPager extends vlElement(HTMLElement) {
   static get _observedAttributes() {
     return ['total-items', 'items-per-page', 'current-page', 'pagination-disabled'];
   }
@@ -72,8 +73,8 @@ export class VlPager extends VlElement(HTMLElement) {
 
   /**
    * Geeft het aantal pagina's terug.
-   * 
-   * @returns {Number} Aantal pagina's.
+   *
+   * @return {Number} Aantal pagina's.
    */
   get totalPages() {
     return Math.ceil(this.totalItems / this.itemsPerPage);
@@ -81,8 +82,8 @@ export class VlPager extends VlElement(HTMLElement) {
 
   /**
    * Geeft het totaal aantal items terug.
-   * 
-   * @returns {Number} Totaal aantal items.
+   *
+   * @return {Number} Totaal aantal items.
    */
   get totalItems() {
     return parseInt(this.getAttribute('total-items'));
@@ -90,11 +91,11 @@ export class VlPager extends VlElement(HTMLElement) {
 
   /**
    * Geeft het huidige pagina nummer terug.
-   * 
-   * @returns {Number} Huidig pagina nummer.
+   *
+   * @return {Number} Huidig pagina nummer.
    */
   get currentPage() {
-    let currentPage = parseInt(this.getAttribute('current-page'));
+    const currentPage = parseInt(this.getAttribute('current-page'));
     if (currentPage < 1) {
       return 1;
     } else {
@@ -104,8 +105,8 @@ export class VlPager extends VlElement(HTMLElement) {
 
   /**
    * Geeft het aantal items per pagina terug.
-   * 
-   * @returns {Number} Aantal items per pagina.
+   *
+   * @return {Number} Aantal items per pagina.
    */
   get itemsPerPage() {
     return parseInt(this.getAttribute('items-per-page'));
@@ -115,7 +116,7 @@ export class VlPager extends VlElement(HTMLElement) {
     if (!this.totalItems) {
       return 0;
     } else {
-      return (this.currentPage - 1) * this.itemsPerPage + 1
+      return (this.currentPage - 1) * this.itemsPerPage + 1;
     }
   }
 
@@ -149,11 +150,11 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   get _pageBackListItem() {
-    return this._shadow.querySelector("#page-back-list-item");
+    return this._shadow.querySelector('#page-back-list-item');
   }
 
   get _pageForwardListItem() {
-    return this._shadow.querySelector("#page-forward-list-item");
+    return this._shadow.querySelector('#page-forward-list-item');
   }
 
   get _totalItemsElement() {
@@ -223,11 +224,11 @@ export class VlPager extends VlElement(HTMLElement) {
     return `${this.itemsPerPage} rijen`;
   }
 
-  _items_per_pageChangedCallback(oldValue, newValue) {
+  _itemsPerPageChangedCallback(oldValue, newValue) {
     this._update();
   };
 
-  _total_itemsChangedCallback(oldValue, newValue) {
+  _totalItemsChangedCallback(oldValue, newValue) {
     if (this.totalItems === 0) {
       this._hide(this._element);
     } else {
@@ -236,15 +237,15 @@ export class VlPager extends VlElement(HTMLElement) {
     }
   }
 
-  _current_pageChangedCallback(oldValue, newValue) {
+  _currentPageChangedCallback(oldValue, newValue) {
     this._update();
     if (oldValue && newValue != oldValue) {
-    	const event = {detail: {currentPage: Number(newValue), totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
-    	this.dispatchEvent(new CustomEvent('change', event));
+      const event = {detail: {currentPage: Number(newValue), totalPage: this.totalPages, itemsPerPage: this.itemsPerPage, totalItems: this.totalItems}, bubbles: true};
+      this.dispatchEvent(new CustomEvent('change', event));
     }
   }
 
-  _pagination_disabledChangedCallback(oldValue, newValue) {
+  _paginationDisabledChangedCallback(oldValue, newValue) {
     if (newValue !== undefined && this._pagesElement) {
       this._pagesElement.remove();
     } else {
@@ -300,10 +301,10 @@ export class VlPager extends VlElement(HTMLElement) {
       range.push(i);
     }
     if (currentPage - delta > 2) {
-      range.unshift("skipped");
+      range.unshift('skipped');
     }
     if (currentPage + delta < pageCount - 1) {
-      range.push("skipped");
+      range.push('skipped');
     }
     range.unshift(1);
     range.push(pageCount);
@@ -311,22 +312,19 @@ export class VlPager extends VlElement(HTMLElement) {
   }
 
   __addPageBackLinkListener() {
-    this._pageBackLink.addEventListener("click", () => {
+    this._pageBackLink.addEventListener('click', () => {
       if (!(this.currentPage - 1 <= 0)) {
-        this.setAttribute("current-page", this.currentPage - 1);
+        this.setAttribute('current-page', this.currentPage - 1);
       }
     });
   }
 
   __addPageForwardLinkListener() {
-    this._pageForwardLink.addEventListener("click", () => {
+    this._pageForwardLink.addEventListener('click', () => {
       if (!(this.currentPage + 1 > this.totalPages)) {
-        this.setAttribute("current-page", this.currentPage + 1);
+        this.setAttribute('current-page', this.currentPage + 1);
       }
     });
-    
-    
-
   }
 }
 
