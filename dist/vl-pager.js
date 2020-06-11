@@ -15,7 +15,6 @@ import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
  *
  * @extends HTMLElement
- * @mixin vlElement
  *
  * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
