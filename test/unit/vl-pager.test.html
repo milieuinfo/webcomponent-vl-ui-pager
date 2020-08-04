@@ -231,6 +231,15 @@
         pager.addEventListener('change', nextPageListener);
         pager.shadowRoot.querySelector('#page-forward-link').click();
       });
+
+      test('de links worden voorzien van tabindex zodat deze via de tab toets bereikbaar zijn', () => {
+        const pager = fixture('vl-pager-fixture');
+        assert.equal(pager._pageBackLink.getAttribute('tabindex'), 0);
+        assert.equal(pager._pageForwardLink.getAttribute('tabindex'), 0);
+        const pages = pager._pagesElement.querySelectorAll('a');
+        assert.isTrue(pages.length > 0);
+        pages.forEach((page) => assert.equal(page.getAttribute('tabindex'), 0));
+      });
     });
   </script>
 </body>

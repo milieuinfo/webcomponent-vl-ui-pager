@@ -46,6 +46,6 @@
     "@govflanders/vl-ui-core": "3.10.1",
     "@govflanders/vl-ui-pager": "^3.9.1",
     "@govflanders/vl-ui-util": "^3.9.2",
-    "vl-ui-util": "^5.2.8"
+    "vl-ui-util": "^5.2.10"
   }
 }
