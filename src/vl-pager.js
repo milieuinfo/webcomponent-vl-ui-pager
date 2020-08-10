@@ -20,7 +20,7 @@ import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @property {number} data-vl-total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} data-vl-current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
  * @property {number} data-vl-items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
- * @property {number} data-vl-pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen..
+ * @property {number} data-vl-pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen.
  * @property {boolean} data-vl-align-center - Attribuut wordt gebruikt om de paginatie te centreren.
  * @property {boolean} data-vl-align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
