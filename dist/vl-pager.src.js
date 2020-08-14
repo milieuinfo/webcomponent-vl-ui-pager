@@ -20,7 +20,7 @@ import {vlElement, define} from 'vl-ui-core';
  * @property {number} data-vl-total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
  * @property {number} data-vl-current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
  * @property {number} data-vl-items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
- * @property {number} data-vl-pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen..
+ * @property {number} data-vl-pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen.
  * @property {boolean} data-vl-align-center - Attribuut wordt gebruikt om de paginatie te centreren.
  * @property {boolean} data-vl-align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
@@ -217,7 +217,7 @@ export class VlPager extends vlElement(HTMLElement) {
         <a class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
       </li>
     `);
-    template.firstElementChild.addEventListener('click', () => this.setAttribute('current-page', number));
+    template.firstElementChild.addEventListener('click', () => this.setAttribute('data-vl-current-page', number));
     return template;
   }
 
@@ -315,7 +315,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageBackLinkListener() {
     this._pageBackLink.addEventListener('click', () => {
       if (!(this.currentPage - 1 <= 0)) {
-        this.setAttribute('current-page', this.currentPage - 1);
+        this.setAttribute('data-vl-current-page', this.currentPage - 1);
       }
     });
   }
@@ -323,7 +323,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageForwardLinkListener() {
     this._pageForwardLink.addEventListener('click', () => {
       if (!(this.currentPage + 1 > this.totalPages)) {
-        this.setAttribute('current-page', this.currentPage + 1);
+        this.setAttribute('data-vl-current-page', this.currentPage + 1);
       }
     });
   }
