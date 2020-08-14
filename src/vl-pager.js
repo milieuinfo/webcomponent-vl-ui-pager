@@ -15,13 +15,14 @@ import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @classdesc Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.
  *
  * @extends HTMLElement
+ * @mixes vlElement
  *
- * @property {number} total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
- * @property {number} current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
- * @property {number} items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
- * @property {number} pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen..
- * @property {boolean} align-center - Attribuut wordt gebruikt om de paginatie te centreren.
- * @property {boolean} align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
+ * @property {number} data-vl-total-items - Attribuut wordt gebruikt om totaal van elementen te bepalen.
+ * @property {number} data-vl-current-page - Attribuut wordt gebruikt om huidige pagina te bepalen.
+ * @property {number} data-vl-items-per-page - Attribuut wordt gebruikt om het aantal rijen per pagina te bepalen.
+ * @property {number} data-vl-pagination-disabled - Attribuut wordt gebruikt om geen pagina links te tonen.
+ * @property {boolean} data-vl-align-center - Attribuut wordt gebruikt om de paginatie te centreren.
+ * @property {boolean} data-vl-align-right - Attribuut wordt gebruikt om de paginatie rechts uit te lijnen.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
@@ -215,7 +216,7 @@ export class VlPager extends vlElement(HTMLElement) {
         <a class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
       </li>
     `);
-    template.firstElementChild.addEventListener('click', () => this.setAttribute('current-page', number));
+    template.firstElementChild.addEventListener('click', () => this.setAttribute('data-vl-current-page', number));
     return template;
   }
 
@@ -313,7 +314,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageBackLinkListener() {
     this._pageBackLink.addEventListener('click', () => {
       if (!(this.currentPage - 1 <= 0)) {
-        this.setAttribute('current-page', this.currentPage - 1);
+        this.setAttribute('data-vl-current-page', this.currentPage - 1);
       }
     });
   }
@@ -321,7 +322,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageForwardLinkListener() {
     this._pageForwardLink.addEventListener('click', () => {
       if (!(this.currentPage + 1 > this.totalPages)) {
-        this.setAttribute('current-page', this.currentPage + 1);
+        this.setAttribute('data-vl-current-page', this.currentPage + 1);
       }
     });
   }

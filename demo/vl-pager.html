@@ -4,31 +4,30 @@
 <head>
     <title>vl-pager voorbeeld</title>
     <script type="module" src="/node_modules/vl-ui-demo/dist/vl-demo-all.js"></script>
+    <script type="module" src="/node_modules/vl-ui-body/dist/vl-body.js"></script>
 
     <script type="module" src="/src/vl-pager.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-body/dist/style.css" />
 </head>
 
-<body>
+<body is="vl-body">
     <vl-demo-page data-vl-webcomponent="vl-pager" data-vl-link="https://overheid.vlaanderen.be/webuniversum/v3/documentation/components/vl-ui-pager">
         <vl-demo data-vl-title="Pager">
-            <vl-pager id="pager-default" total-items="100" items-per-page="10" current-page="1"></vl-pager>
+            <vl-pager id="pager-default" data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
         </vl-demo>
 
         <vl-demo data-vl-title="Single page">
-            <vl-pager id="pager-single" align-center total-items="10" items-per-page="10" current-page="1"></vl-pager>
+            <vl-pager id="pager-single" data-vl-align-center data-vl-total-items="10" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
         </vl-demo>
 
         <vl-demo data-vl-title="Pager zonder pagina items">
-            <vl-pager id="pager-no-pagination" align-center total-items="100" items-per-page="10" current-page="1"
-                pagination-disabled></vl-pager>
+            <vl-pager id="pager-no-pagination" data-vl-align-center data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1" data-vl-pagination-disabled></vl-pager>
         </vl-demo>
 
         <vl-demo data-vl-title="Event listener">
             <div id="pager-event-listener-log"></div>
-            <vl-pager id="pager-event-listener" align-center total-items="100" items-per-page="10" current-page="1">
-            </vl-pager>
+            <vl-pager id="pager-event-listener" data-vl-align-center data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
             <script>
                 document.querySelector('#pager-event-listener').addEventListener('change', (e) => {
                   document.querySelector('#pager-event-listener-log').innerText = JSON.stringify(e.detail);
@@ -37,11 +36,11 @@
         </vl-demo>
 
         <vl-demo data-vl-title="Align center">
-            <vl-pager id="pager-center" align-center total-items="100" items-per-page="10" current-page="1"></vl-pager>
+            <vl-pager id="pager-center" data-vl-align-center data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
         </vl-demo>
 
         <vl-demo data-vl-title="Align right">
-            <vl-pager id="pager-right" align-right total-items="100" items-per-page="10" current-page="1"></vl-pager>
+            <vl-pager id="pager-right" data-vl-align-right data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
         </vl-demo>
     </vl-demo-page>
 </body>
