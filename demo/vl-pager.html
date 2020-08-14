@@ -4,13 +4,14 @@
 <head>
     <title>vl-pager voorbeeld</title>
     <script type="module" src="/node_modules/vl-ui-demo/dist/vl-demo-all.js"></script>
+    <script type="module" src="/node_modules/vl-ui-body/dist/vl-body.js"></script>
 
     <script type="module" src="/src/vl-pager.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-body/dist/style.css" />
 </head>
 
-<body>
+<body is="vl-body">
     <vl-demo-page data-vl-webcomponent="vl-pager" data-vl-link="https://overheid.vlaanderen.be/webuniversum/v3/documentation/components/vl-ui-pager">
         <vl-demo data-vl-title="Pager">
             <vl-pager id="pager-default" data-vl-total-items="100" data-vl-items-per-page="10" data-vl-current-page="1"></vl-pager>
