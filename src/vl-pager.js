@@ -216,7 +216,7 @@ export class VlPager extends vlElement(HTMLElement) {
         <a class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
       </li>
     `);
-    template.firstElementChild.addEventListener('click', () => this.setAttribute('current-page', number));
+    template.firstElementChild.addEventListener('click', () => this.setAttribute('data-vl-current-page', number));
     return template;
   }
 
@@ -314,7 +314,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageBackLinkListener() {
     this._pageBackLink.addEventListener('click', () => {
       if (!(this.currentPage - 1 <= 0)) {
-        this.setAttribute('current-page', this.currentPage - 1);
+        this.setAttribute('data-vl-current-page', this.currentPage - 1);
       }
     });
   }
@@ -322,7 +322,7 @@ export class VlPager extends vlElement(HTMLElement) {
   __addPageForwardLinkListener() {
     this._pageForwardLink.addEventListener('click', () => {
       if (!(this.currentPage + 1 > this.totalPages)) {
-        this.setAttribute('current-page', this.currentPage + 1);
+        this.setAttribute('data-vl-current-page', this.currentPage + 1);
       }
     });
   }
