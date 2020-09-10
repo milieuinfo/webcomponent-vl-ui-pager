@@ -235,10 +235,13 @@
       test('de links worden voorzien van tabindex zodat deze via de tab toets bereikbaar zijn', () => {
         const pager = fixture('vl-pager-fixture');
         assert.equal(pager._pageBackLink.getAttribute('tabindex'), 0);
+        assert.equal(pager._pageBackLink.getAttribute('href'), '#');
         assert.equal(pager._pageForwardLink.getAttribute('tabindex'), 0);
+        assert.equal(pager._pageForwardLink.getAttribute('href'), '#');
         const pages = pager._pagesElement.querySelectorAll('a');
         assert.isTrue(pages.length > 0);
         pages.forEach((page) => assert.equal(page.getAttribute('tabindex'), 0));
+        pages.forEach((page) => assert.equal(page.getAttribute('href'), '#'));
       });
     });
   </script>
