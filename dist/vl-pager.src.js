@@ -217,7 +217,10 @@ export class VlPager extends vlElement(HTMLElement) {
         <a class="vl-pager__element__cta vl-link vl-link--bold" href="#" tabindex="0">${number}</a>
       </li>
     `);
-    template.firstElementChild.addEventListener('click', () => this.setAttribute('data-vl-current-page', number));
+    template.firstElementChild.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.setAttribute('data-vl-current-page', number);
+    });
     return template;
   }
 
@@ -313,7 +316,8 @@ export class VlPager extends vlElement(HTMLElement) {
   }
 
   __addPageBackLinkListener() {
-    this._pageBackLink.addEventListener('click', () => {
+    this._pageBackLink.addEventListener('click', (e) => {
+      e.preventDefault();
       if (!(this.currentPage - 1 <= 0)) {
         this.setAttribute('data-vl-current-page', this.currentPage - 1);
       }
@@ -321,7 +325,8 @@ export class VlPager extends vlElement(HTMLElement) {
   }
 
   __addPageForwardLinkListener() {
-    this._pageForwardLink.addEventListener('click', () => {
+    this._pageForwardLink.addEventListener('click', (e) => {
+      e.preventDefault();
       if (!(this.currentPage + 1 > this.totalPages)) {
         this.setAttribute('data-vl-current-page', this.currentPage + 1);
       }
