@@ -232,7 +232,7 @@
         pager.shadowRoot.querySelector('#page-forward-link').click();
       });
 
-      test('de links worden voorzien van tabindex zodat deze via de tab toets bereikbaar zijn', () => {
+      test('de links worden voorzien van tabindex en href zodat deze via de tab toets bereikbaar zijn', () => {
         const pager = fixture('vl-pager-fixture');
         assert.equal(pager._pageBackLink.getAttribute('tabindex'), 0);
         assert.equal(pager._pageBackLink.getAttribute('href'), '#');
@@ -242,6 +242,18 @@
         assert.isTrue(pages.length > 0);
         pages.forEach((page) => assert.equal(page.getAttribute('tabindex'), 0));
         pages.forEach((page) => assert.equal(page.getAttribute('href'), '#'));
+      });
+
+      test('een klik op een paginatie link veroorzaakt geen URL wijziging', () => {
+        const pager = fixture('vl-pager-fixture');
+        assert.isFalse(document.location.href.endsWith('#'));
+        pager._pageBackLink.click();
+        assert.isFalse(document.location.href.endsWith('#'));
+        pager._pageForwardLink.click();
+        assert.isFalse(document.location.href.endsWith('#'));
+        const pages = pager._pagesElement.querySelectorAll('a');
+        pages[0].click();
+        assert.isFalse(document.location.href.endsWith('#'));
       });
     });
   </script>
