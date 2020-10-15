@@ -47,6 +47,6 @@
     "@govflanders/vl-ui-pager": "^3.11.5",
     "@govflanders/vl-ui-util": "^3.11.5",
     "vl-ui-body": "^1.0.4",
-    "vl-ui-util": "^5.2.14"
+    "vl-ui-util": "^5.2.15"
   }
 }
