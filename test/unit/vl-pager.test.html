@@ -21,7 +21,7 @@
       const should = chai.should();
 
       setup((done) => {
-        customElements.whenDefined('vl-pager').then(done);
+        customElements.whenDefined('vl-pager').then(() => done());
       });
 
       function trim(text) {
