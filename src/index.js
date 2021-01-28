@@ -1,4 +1,1 @@
-module.exports = {
-  VlPager: require('../dist/vl-pager.src.js').VlPager,
-}
-;
+export * from '../dist/vl-pager.src.js';
