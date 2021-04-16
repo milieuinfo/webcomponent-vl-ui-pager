@@ -38,7 +38,7 @@ class VlPager extends VlElement {
   }
 
   async getCurrentPage() {
-    const label = await this.shadowRoot.findElement(By.css('#pages li label'));
+    const label = await this.shadowRoot.findElement(By.css('[data-vl-pager-page] label'));
     return label.getText();
   }
 
@@ -67,24 +67,21 @@ class VlPager extends VlElement {
 
   async goToFirstPage() {
     if (await this.getCurrentPage() != 1) {
-      const allVisiblePages = await this._getAllVisiblePageLinks();
-      return allVisiblePages[0].click();
+      return this.goToPage(1);
     }
   }
 
   async goToLastPage() {
-    const numberOfPages = Math.ceil(await this.getItemsPerPage() / await this.getTotalItems());
-    if (await this.getCurrentPage != numberOfPages) {
-      const allVisiblePages = await this._getAllVisiblePageNumbers();
-      const lastPage = allVisiblePages[allVisiblePages.length - 1];
-      return lastPage.click();
-    }
+    const number = Math.ceil(await this.getTotalItems() / await this.getItemsPerPage());
+    return this.goToPage(number);
   }
 
-  async goToPage(pageNumber) {
-    await this._navigateUntilPagenumberIsVisible(pageNumber);
-    const page = await this.shadowRoot.findElement(By.css('li[data-vl-pager-page="' + pageNumber + '"] a'));
-    return page.click();
+  async goToPage(number) {
+    if (await this.getCurrentPage != number) {
+      await this._navigateUntilPagenumberIsVisible(number);
+      const page = await this._getPageLink(number);
+      return page.click();
+    }
   }
 
   async isPageBackDisplayed() {
@@ -98,7 +95,7 @@ class VlPager extends VlElement {
   async _navigateUntilPagenumberIsVisible(pageNumber) {
     if (! await this._isPageNumberVisible(pageNumber)) {
       await this.goToNextPage();
-      return this._navigateUntilPagenumberIsVisible(pageNumber);
+      return await this._navigateUntilPagenumberIsVisible(pageNumber);
     }
   }
 
@@ -113,12 +110,16 @@ class VlPager extends VlElement {
     return false;
   }
 
+  async _getPageLink(number) {
+    return this.shadowRoot.findElement(By.css(`[data-vl-pager-page="${number}"] a`));
+  }
+
   async _getAllVisiblePageLinks() {
-    return this.shadowRoot.findElements(By.css('#pages li a'));
+    return this.shadowRoot.findElements(By.css('[data-vl-pager-page] a'));
   }
 
   async _getAllVisiblePageNumbers() {
-    return this.shadowRoot.findElements(By.css('#pages li'));
+    return this.shadowRoot.findElements(By.css('[data-vl-pager-page]'));
   }
 
   async _pageForwardLink() {
@@ -129,7 +130,6 @@ class VlPager extends VlElement {
     return this.shadowRoot.findElement(By.css('#page-back-link'));
   }
 
-  // State resetten voor testen, puur voor leesbaarheid
   async reset() {
     return this.goToFirstPage();
   }

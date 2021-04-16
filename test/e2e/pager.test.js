@@ -9,6 +9,10 @@ describe('vl-pager', async () => {
     return vlPagerPage.load();
   });
 
+  it('WCAG', async () => {
+    await assert.eventually.isFalse(vlPagerPage.hasWcagIssues());
+  });
+
   it('als gebruiker kan ik naar de volgende pagina gaan en ook terug naar de vorige', async () => {
     const pager = await vlPagerPage.getDefaultPager();
     await assert.eventually.equal(pager.getCurrentPage(), 1);
@@ -121,8 +125,8 @@ describe('vl-pager', async () => {
     await assert.eventually.equal(logElement.getText(), '{"currentPage":2,"totalPage":10,"itemsPerPage":10,"totalItems":100}');
   });
 
-  async function assertRangeMinMaxIsEqualTo(range, minimum, maximum) {
+  const assertRangeMinMaxIsEqualTo = async (range, minimum, maximum) => {
     await assert.equal(range.minimum, minimum);
     await assert.equal(range.maximum, maximum);
-  }
+  };
 });

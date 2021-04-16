@@ -53,7 +53,6 @@
 
       test('voor elke niet actieve pagina wordt een link gemaakt zodat er genavigeerd kan worden met maximaal 3 pagina\'s voor en na de huidige pagina', () => {
         const pager = fixture('vl-pager-fixture');
-        let pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
         let pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
         let pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
         let pageLink3 = pager.shadowRoot.querySelector('[data-vl-pager-page="3"]');
@@ -74,10 +73,9 @@
         should.not.exist(pageLink8);
         should.not.exist(pageLink9);
         should.exist(pageLink10.querySelector('a'));
-        assert.lengthOf(pageLinkEllipsis, 1);
-        assert.equal(pageLinkEllipsis[0], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[3]);
+        assert.lengthOf(pager._pageSkippedElements, 1);
+        assert.equal(pager._pageSkippedElements[0], pager.shadowRoot.querySelectorAll('.vl-pager__element')[5]);
         pager.setAttribute('data-vl-current-page', 5);
-        pageLinkEllipsis = pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element:not([data-vl-pager-page])');
         pageLink1 = pager.shadowRoot.querySelector('[data-vl-pager-page="1"]');
         pageLink2 = pager.shadowRoot.querySelector('[data-vl-pager-page="2"]');
         pageLink3 = pager.shadowRoot.querySelector('[data-vl-pager-page="3"]');
@@ -98,9 +96,9 @@
         should.not.exist(pageLink8);
         should.not.exist(pageLink9);
         should.exist(pageLink10.querySelector('a'));
-        assert.lengthOf(pageLinkEllipsis, 2);
-        assert.equal(pageLinkEllipsis[0], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[1]);
-        assert.equal(pageLinkEllipsis[1], pager.shadowRoot.querySelectorAll('#pages > .vl-pager__element')[7]);
+        assert.lengthOf(pager._pageSkippedElements, 2);
+        assert.equal(pager._pageSkippedElements[0], pager.shadowRoot.querySelectorAll('.vl-pager__element')[3]);
+        assert.equal(pager._pageSkippedElements[1], pager.shadowRoot.querySelectorAll('.vl-pager__element')[9]);
       });
 
       test('de current page wordt visueel aangeduid door een label in plaats van een link', (done) => {
@@ -205,9 +203,11 @@
 
       test('met een pagination-disabled attribuut zal geen pagina links bevatten', () => {
         const pager = fixture('vl-pager-fixture');
-        should.exist(pager._pagesElement);
+        assert.isTrue(pager._pageElements.length > 0);
+        assert.isTrue(pager._pageSkippedElements.length > 0);
         pager.setAttribute('data-vl-pagination-disabled', '');
-        should.not.exist(pager._pagesElement);
+        assert.lengthOf(pager._pageElements, 0);
+        assert.lengthOf(pager._pageSkippedElements, 0);
       });
 
       test('er wordt een change event gegooid telkens huidige pagina verandert', (done) => {
@@ -232,16 +232,13 @@
         pager.shadowRoot.querySelector('#page-forward-link').click();
       });
 
-      test('de links worden voorzien van tabindex en href zodat deze via de tab toets bereikbaar zijn', () => {
+      test('de links worden voorzien href zodat deze via de tab toets bereikbaar zijn', () => {
         const pager = fixture('vl-pager-fixture');
-        assert.equal(pager._pageBackLink.getAttribute('tabindex'), 0);
         assert.equal(pager._pageBackLink.getAttribute('href'), '#');
-        assert.equal(pager._pageForwardLink.getAttribute('tabindex'), 0);
         assert.equal(pager._pageForwardLink.getAttribute('href'), '#');
-        const pages = pager._pagesElement.querySelectorAll('a');
-        assert.isTrue(pages.length > 0);
-        pages.forEach((page) => assert.equal(page.getAttribute('tabindex'), 0));
-        pages.forEach((page) => assert.equal(page.getAttribute('href'), '#'));
+        const links = pager._pageElements.map((page) => page.querySelector('a')).filter((link) => link !== null);
+        assert.isTrue(links.length > 0);
+        links.forEach((link) => assert.equal(link.getAttribute('href'), '#'));
       });
 
       test('een klik op een paginatie link veroorzaakt geen URL wijziging', () => {
@@ -251,7 +248,7 @@
         assert.isFalse(document.location.href.endsWith('#'));
         pager._pageForwardLink.click();
         assert.isFalse(document.location.href.endsWith('#'));
-        const pages = pager._pagesElement.querySelectorAll('a');
+        const pages = pager._pageElements.map((element) => element.querySelector('a'));
         pages[0].click();
         assert.isFalse(document.location.href.endsWith('#'));
       });
