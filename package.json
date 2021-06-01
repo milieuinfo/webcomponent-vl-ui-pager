@@ -1,6 +1,6 @@
 {
   "name": "vl-ui-pager",
-  "version": "3.0.11",
+  "version": "3.0.12",
   "description": "Gebruik de pager component om het aantal beschikbare pagina's weer te geven, markeer de huidige pagina en voeg navigatie knoppen toe.",
   "author": "DIDM",
   "license": "MIT",

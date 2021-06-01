@@ -137,8 +137,12 @@ export class VlPager extends vlElement(HTMLElement) {
     return this._shadow.querySelector('.vl-pager__list');
   }
 
-  get _pagesElement() {
-    return this._shadow.querySelector('#pages');
+  get _pageElements() {
+    return [...this._pagesListElement.querySelectorAll('[data-vl-pager-page]')];
+  }
+
+  get _pageSkippedElements() {
+    return [...this._pagesListElement.querySelectorAll('[data-vl-pager-page-skipped]')];
   }
 
   get _pageBackLink() {
@@ -190,7 +194,7 @@ export class VlPager extends vlElement(HTMLElement) {
 
   __getActivePageTemplate(number) {
     return this._template(`
-      <li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
+      <li data-vl-pager-page=${number} class="vl-pager__element"> 
         <label>${number}</label>
       </li>
     `);
@@ -198,22 +202,16 @@ export class VlPager extends vlElement(HTMLElement) {
 
   __getSkippedPageTemplate() {
     return this._template(`
-      <li class="vl-pager__element">
+      <li data-vl-pager-page-skipped class="vl-pager__element">
         <div class="vl-pager__element__cta">...</div>
       </li>
     `);
   }
 
-  __getPagesTemplate() {
-    return this._template(`
-      <li id="pages" class="vl-pager__element"></li>
-    `);
-  }
-
   __getPageTemplate(number) {
     const template = this._template(`
-      <li name="pageLink" data-vl-pager-page=${number} class="vl-pager__element"> 
-        <a class="vl-pager__element__cta vl-link vl-link--bold" href="#" tabindex="0">${number}</a>
+      <li data-vl-pager-page=${number} class="vl-pager__element"> 
+        <a href="#" class="vl-pager__element__cta vl-link vl-link--bold">${number}</a>
       </li>
     `);
     template.firstElementChild.addEventListener('click', (e) => {
@@ -249,10 +247,8 @@ export class VlPager extends vlElement(HTMLElement) {
   }
 
   _paginationDisabledChangedCallback(oldValue, newValue) {
-    if (newValue !== undefined && this._pagesElement) {
-      this._pagesElement.remove();
-    } else {
-      this._pagesListElement.insertBefore(this.__getPagesTemplate(), this._pageForwardListItem);
+    if (newValue !== undefined) {
+      this.__removePageElements();
     }
   }
 
@@ -279,15 +275,11 @@ export class VlPager extends vlElement(HTMLElement) {
 
   _updatePagination() {
     if (this._isPagination) {
-      if (!this._pagesElement) {
-        this._pagesListElement.insertBefore(this.__getPagesTemplate(), this._pageForwardListItem);
-      }
-
-      this._pagesElement.innerHTML = '';
+      this.__removePageElements();
       if (this.totalPages > 1) {
         const pages = this.__generatePagination(this.currentPage, this.totalPages);
-        const content = pages.map((number) => this._getPageTemplate(number));
-        this._pagesElement.append(...content);
+        const templates = pages.map((number) => this._getPageTemplate(number));
+        templates.forEach((template) => this._pagesListElement.insertBefore(template, this._pageForwardListItem));
       }
     }
   }
@@ -330,6 +322,11 @@ export class VlPager extends vlElement(HTMLElement) {
         this.setAttribute('data-vl-current-page', this.currentPage + 1);
       }
     });
+  }
+
+  __removePageElements() {
+    this._pageElements.forEach((page) => page.remove());
+    this._pageSkippedElements.forEach((element) => element.remove());
   }
 }
 
